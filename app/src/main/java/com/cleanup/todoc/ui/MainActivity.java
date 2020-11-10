@@ -7,6 +7,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.cleanup.todoc.R;
 import com.cleanup.todoc.databinding.ActivityMainBinding;
@@ -88,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
     }
 
     /**
-     * TaskAdapter.DeleteTaskListener interface implementaiton
+     * TaskAdapter.DeleteTaskListener interface implementation
      * @param task : the task that needs to be deleted
      */
     @Override
@@ -102,23 +103,30 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
      * A click displays the Task Dialog
      */
     private void handleFab() {
-        binding.fabAddTask.setOnClickListener((View view) ->  showAddTaskDialog() );
+        binding.fabAddTask.setOnClickListener((View view) ->  showAddTaskDialog());
     }
 
+    /**
+     * Handles RecyclerView initialization to display Task list
+     */
     private void initializeRecyclerView() {
         binding.listTasks.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         binding.listTasks.setAdapter(adapter);
     }
 
+    /**
+     * Handles TaskDialog initialization
+     */
     private void initializeTaskDialog() {
         if( getSupportFragmentManager().findFragmentByTag(TaskDialog.TAG_TASK_DIALOG) != null) {
-            taskDialog = (TaskDialog) getSupportFragmentManager().findFragmentByTag(TaskDialog.TAG_TASK_DIALOG);
-            taskDialog.setAllProjects(allProjects);
-            taskDialog.setTaskActions(this);
+            Fragment fragment =  getSupportFragmentManager().findFragmentByTag(TaskDialog.TAG_TASK_DIALOG);
+            ((TaskDialog) fragment).setAllProjects(allProjects);
+            ((TaskDialog) fragment).setTaskActions(this);
         }
-        else{
+        else {
             taskDialog = new TaskDialog(this, allProjects);
         }
+
     }
     /**
      * Displays Task Dialog
