@@ -14,7 +14,7 @@ import android.widget.Spinner;
 import com.cleanup.todoc.R;
 import com.cleanup.todoc.model.Project;
 import com.cleanup.todoc.model.Task;
-import com.cleanup.todoc.ui.TaskActions;
+import com.cleanup.todoc.ui.fragments.TaskActions;
 import java.util.Date;
 
 public class TaskDialog extends DialogFragment {

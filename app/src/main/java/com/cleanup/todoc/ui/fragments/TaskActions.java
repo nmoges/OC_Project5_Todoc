@@ -1,4 +1,4 @@
-package com.cleanup.todoc.ui;
+package com.cleanup.todoc.ui.fragments;
 
 import androidx.annotation.NonNull;
 import com.cleanup.todoc.model.Task;

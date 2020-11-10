@@ -18,8 +18,8 @@ android {
         }
     }
 
-    viewBinding {
-        enabled = true
+    buildFeatures {
+        viewBinding = true
     }
 
     lintOptions {
@@ -34,18 +34,34 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
+    def constraint_version = "2.0.4"
+    def room_version = "2.2.5"
+    def legacy_version = "1.1.0"
+    def appcompat_version = "1.2.0"
+    def recyclerview_version = "1.1.0"
+    def material_version = "1.2.1"
+
+    // Constraint Layout
+    implementation "androidx.constraintlayout:constraintlayout:$constraint_version"
 
     // Legacy Support
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    //implementation "androidx.legacy:legacy-support-v4:$legacy_version"
 
     // AppCompat
-    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation "androidx.appcompat:appcompat:$appcompat_version"
 
     // RecyclerView
-    implementation "androidx.recyclerview:recyclerview:1.1.0"
+    implementation "androidx.recyclerview:recyclerview:$recyclerview_version"
 
     // Material Component
-    implementation "com.google.android.material:material:1.2.1"
+    implementation "com.google.android.material:material:$material_version"
+
+    // Room
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+
+    // Fragment
+    implementation 'androidx.fragment:fragment:1.3.0-beta01'
 
     testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
@@ -54,6 +70,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:3.0.2'
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.3.0'
-  //  androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-
+    
 }

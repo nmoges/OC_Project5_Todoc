@@ -2,6 +2,9 @@ package com.cleanup.todoc.model;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.room.Entity;
+import androidx.room.ForeignKey;
+
 import java.util.Comparator;
 
 /**
@@ -9,6 +12,8 @@ import java.util.Comparator;
  *
  * @author Gaëtan HERFRAY
  */
+//@Entity(foreignKey = @ForeignKey(entity = Project.class,
+//))
 public class Task {
     /**
      * The unique identifier of the task
@@ -60,7 +65,7 @@ public class Task {
     /**
      * Sets the unique identifier of the task.
      *
-     * @param id the unique idenifier of the task to set
+     * @param id the unique identifier of the task to set
      */
     private void setId(long id) {
         this.id = id;
