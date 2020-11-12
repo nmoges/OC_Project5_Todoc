@@ -25,6 +25,10 @@ import static org.junit.Assert.assertThat;
  * @author Gaëtan HERFRAY
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
+
+// TODO() : This file must be delete and replaced by a test file for TaskListFragment,
+//          since all UI logic has been removed from MainActivity activity
+
 @RunWith(AndroidJUnit4.class)
 public class MainActivityInstrumentedTest {
     @Rule

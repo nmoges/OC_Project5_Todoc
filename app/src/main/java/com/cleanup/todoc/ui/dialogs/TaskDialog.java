@@ -110,7 +110,7 @@ public class TaskDialog extends DialogFragment {
                 // TODO(): Replace this by id of persisted task
                 long id = (long) (Math.random() * 50000);
 
-                Task task = new Task(id, taskProject.getId(), taskName, new Date().getTime());
+                Task task = new Task(id, taskProject.getProjectId(), taskName, new Date().getTime());
 
                 taskActions.addTask(task);
                 dialogInterface.dismiss();

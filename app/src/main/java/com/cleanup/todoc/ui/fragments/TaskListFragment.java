@@ -5,6 +5,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -74,12 +76,11 @@ public class TaskListFragment extends Fragment implements TasksAdapter.DeleteTas
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         initializeToolbar();
 
         initializeRecyclerView();
 
-        initializeTaskDialog();
+        updateTaskDialog();
 
         handleFab();
     }
@@ -128,6 +129,7 @@ public class TaskListFragment extends Fragment implements TasksAdapter.DeleteTas
      * A click displays the Task Dialog
      */
     private void handleFab() {
+
         binding.fabAddTask.setOnClickListener((View view) ->  showAddTaskDialog());
     }
 
@@ -142,22 +144,19 @@ public class TaskListFragment extends Fragment implements TasksAdapter.DeleteTas
     /**
      * Handles TaskDialog initialization
      */
-    private void initializeTaskDialog() {
+    private void updateTaskDialog() {
         if( getParentFragmentManager().findFragmentByTag(TaskDialog.TAG_TASK_DIALOG) != null) {
             Fragment fragment =  getParentFragmentManager().findFragmentByTag(TaskDialog.TAG_TASK_DIALOG);
             ((TaskDialog) fragment).setAllProjects(allProjects);
             ((TaskDialog) fragment).setTaskActions(this);
         }
-        else {
-            taskDialog = new TaskDialog(this, allProjects);
-        }
-
     }
 
     /**
      * Displays Task Dialog
      */
     private void showAddTaskDialog() {
+        taskDialog = new TaskDialog(this, allProjects);
         taskDialog.show(getParentFragmentManager(), TaskDialog.TAG_TASK_DIALOG);
     }
 

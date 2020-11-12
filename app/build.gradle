@@ -63,6 +63,9 @@ dependencies {
     // Fragment
     implementation 'androidx.fragment:fragment:1.3.0-beta01'
 
+    // optional - Test helpers
+    testImplementation "androidx.room:room-testing:$room_version"
+
     testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test:rules:1.0.2'
