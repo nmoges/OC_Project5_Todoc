@@ -1,9 +1,11 @@
-package com.cleanup.todoc.ui;
+package com.cleanup.todoc.ui.activities;
 
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import com.cleanup.todoc.database.TodocDatabase;
 import com.cleanup.todoc.databinding.ActivityMainBinding;
+
 
 /**
  * <p>Home activity of the application which is displayed when the user opens the app.</p>
@@ -34,5 +36,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityCallb
     @Override
     public void setToolbarTitle(int title) {
         binding.toolbarMain.setTitle(title);
+    }
+
+    @Override
+    public void onBackPressed() {
+        TodocDatabase.getInstance(getApplicationContext()).close();
+        finish();
     }
 }

@@ -6,7 +6,6 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
-
 import java.util.Comparator;
 
 /**
@@ -14,52 +13,48 @@ import java.util.Comparator;
  *
  * @author Gaëtan HERFRAY
  */
-@Entity(foreignKeys = @ForeignKey(entity = Project.class, parentColumns = "projectId", childColumns = "taskId"),
-        tableName = "task_table")
+@Entity(tableName = "task_table",
+        foreignKeys = @ForeignKey(entity = Project.class, parentColumns = "id", childColumns = "project_id"))
 public class Task {
     /**
      * The unique identifier of the task
      */
     @PrimaryKey(autoGenerate = true)
-    private long taskId;
+    public int id;
 
     /**
      * The unique identifier of the project associated to the task
      */
-    @ColumnInfo(name = "project_id_task")
-    private long projectId;
+    @ColumnInfo(name = "project_id")
+    private int projectId;
 
     /**
      * The name of the task
      */
-    // Suppress warning because setName is called in constructor
-    @SuppressWarnings("NullableProblems")
-    @ColumnInfo(name = "name_task")
     @NonNull
     private String name;
 
     /**
      * The timestamp when the task has been created
      */
-    @ColumnInfo(name = "time_creation_task")
+    @ColumnInfo(name = "timestamp_creation")
     private long creationTimestamp;
 
     /**
      * Instantiates a new Task.
      *
-     * @param taskId            the unique identifier of the task to set
      * @param projectId         the unique identifier of the project associated to the task to set
      * @param name              the name of the task to set
      * @param creationTimestamp the timestamp when the task has been created to set
      */
-    public Task(long taskId, long projectId, @NonNull String name, long creationTimestamp) {
-        this.setTaskId(taskId);
+
+    public Task(int projectId, @NonNull String name, long creationTimestamp) {
         this.setProjectId(projectId);
         this.setName(name);
         this.setCreationTimestamp(creationTimestamp);
     }
 
-    public long getProjectId() {
+    public int getProjectId() {
         return projectId;
     }
 
@@ -72,8 +67,8 @@ public class Task {
      *
      * @return the unique identifier of the task
      */
-    public long getTaskId() {
-        return taskId;
+    public int getId() {
+        return id;
     }
 
     /**
@@ -81,8 +76,8 @@ public class Task {
      *
      * @param taskId the unique identifier of the task to set
      */
-    private void setTaskId(long taskId) {
-        this.taskId = taskId;
+    private void setTaskId(int taskId) {
+        this.id = id;
     }
 
     /**
@@ -90,7 +85,7 @@ public class Task {
      *
      * @param projectId the unique identifier of the project associated to the task to set
      */
-    private void setProjectId(long projectId) {
+    private void setProjectId(int projectId) {
         this.projectId = projectId;
     }
 

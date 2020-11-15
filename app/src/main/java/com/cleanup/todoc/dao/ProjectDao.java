@@ -1,11 +1,15 @@
 package com.cleanup.todoc.dao;
 
+import androidx.annotation.VisibleForTesting;
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 import com.cleanup.todoc.model.Project;
+import java.util.List;
 
 /**
  * DAO interface defining methods to access project_table data
@@ -13,8 +17,7 @@ import com.cleanup.todoc.model.Project;
 @Dao
 public interface ProjectDao {
 
-
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertProject(Project project);
 
     @Update
@@ -23,7 +26,10 @@ public interface ProjectDao {
     @Delete
     void deleteProject(Project project);
 
-    @Query("SELECT * FROM project_table WHERE projectId = :projectId")
-    Project getProject(long projectId);
+    @VisibleForTesting
+    @Query("SELECT * FROM project_table WHERE id = :id")
+    Project getProject(int id);
 
+    @Query("SELECT * FROM project_table ORDER BY id")
+    LiveData<List<Project>> loadAllProject();
 }

@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import java.util.Date;
+
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -22,9 +23,7 @@ public class TaskDaoTest {
 
     private TodocDatabase database;
     private Project[] allProjects;
-    private final static long FIRST_TASK_ID = 1;
-    private final static long SECOND_TASK_ID = 2;
-    private final static long THIRD_TASK_ID = 3;
+    private final static int FIRST_TASK_ID = 1;
 
     @Before
     public void initDatabase() {
@@ -59,15 +58,15 @@ public class TaskDaoTest {
         long creationTimestamp = new Date().getTime();
         String nameTask = "Appeler le client";
 
-        Task task = new Task(FIRST_TASK_ID, 1L, nameTask, creationTimestamp);
-
+        //Task task = new Task(FIRST_TASK_ID, 1L, nameTask, creationTimestamp);
+        Task task = new Task(1, nameTask, creationTimestamp);
         // Insert task
         database.taskDao().insertTask(task);
 
         // Read task from database
         Task taskRead = database.taskDao().getTask(FIRST_TASK_ID);
-        assertEquals(FIRST_TASK_ID, taskRead.getTaskId());
-        assertEquals(1L, taskRead.getProjectId());
+        assertEquals(FIRST_TASK_ID, taskRead.getId());
+        assertEquals(1, taskRead.getProjectId());
         assertEquals(nameTask, taskRead.getName());
         assertEquals(creationTimestamp, taskRead.getCreationTimestamp());
     }
@@ -84,23 +83,24 @@ public class TaskDaoTest {
     @Test
     public void removeTaskFromTable() {
         // Create Tasks to insert in task_table
-        Task firstTask = new Task(FIRST_TASK_ID, 1L, "Appeler le client", new Date().getTime());
-        Task secondTask = new Task(SECOND_TASK_ID, 2L, "Intégrer Google Analytics", new Date().getTime());
-        Task thirdTask = new Task(THIRD_TASK_ID, 3L, "Modifier la couleur des textes", new Date().getTime());
+        Task firstTask = new Task(1, "Appeler le client", new Date().getTime());
+        Task secondTask = new Task(2, "Intégrer Google Analytics", new Date().getTime());
+        Task thirdTask = new Task(3, "Modifier la couleur des textes", new Date().getTime());
 
         // Insert tasks
         database.taskDao().insertTask(firstTask);
         database.taskDao().insertTask(secondTask);
         database.taskDao().insertTask(thirdTask);
 
-        // Remove second task from database
-        int result = database.taskDao().deleteTask(secondTask);
+        // Get the task to remove with primaryKey incremented
+        Task taskToRemove = database.taskDao().getTask(1);
+
+        // Remove task from database
+        int result = database.taskDao().deleteTask(taskToRemove);
         assertEquals(result, 1); // 1 row deleted
 
-        // Try to remove second task again
-        result = database.taskDao().deleteTask(secondTask);
+        // Check if same operation doesn't work (task already removed)
+        result = database.taskDao().deleteTask(taskToRemove);
         assertEquals(result, 0); // 0 row deleted
     }
-
-
 }

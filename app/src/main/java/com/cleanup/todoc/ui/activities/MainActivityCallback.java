@@ -1,4 +1,4 @@
-package com.cleanup.todoc.ui;
+package com.cleanup.todoc.ui.activities;
 
 import androidx.annotation.StringRes;
 

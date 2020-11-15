@@ -47,10 +47,10 @@ public class ProjectDaoTest {
         }
 
         // Get first project from database (Project Projet Tartampion)
-        Project project = database.projectDao().getProject(1L);
+        Project project = database.projectDao().getProject(1);
 
         // Read values
-        assertEquals(project.getProjectId(), allProjects[0].getProjectId());
+        assertEquals(project.getId(), 1);
         assertEquals(project.getName(), allProjects[0].getName());
         assertEquals(project.getColor(), allProjects[0].getColor());
     }

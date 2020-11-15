@@ -5,23 +5,25 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import com.cleanup.todoc.viewmodel.ListProjectsViewModel;
+import com.cleanup.todoc.viewmodel.ListTasksViewModel;
 import com.cleanup.todoc.R;
+import com.cleanup.todoc.viewmodel.ViewModelFactory;
 import com.cleanup.todoc.databinding.FragmentTaskListBinding;
 import com.cleanup.todoc.model.Project;
 import com.cleanup.todoc.model.Task;
-import com.cleanup.todoc.ui.MainActivityCallback;
+import com.cleanup.todoc.ui.activities.MainActivityCallback;
 import com.cleanup.todoc.utils.SortMethod;
 import com.cleanup.todoc.ui.dialogs.TaskDialog;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class TaskListFragment extends Fragment implements TasksAdapter.DeleteTaskListener, TaskActions {
 
@@ -30,7 +32,8 @@ public class TaskListFragment extends Fragment implements TasksAdapter.DeleteTas
     /**
      * List of all projects available in the application
      */
-    private final Project[] allProjects = Project.getAllProjects();
+    @NonNull
+    private final ArrayList<Project> projects = new ArrayList<>();
 
     /**
      * List of all current tasks of the application
@@ -41,7 +44,7 @@ public class TaskListFragment extends Fragment implements TasksAdapter.DeleteTas
     /**
      * The adapter which handles the list of tasks
      */
-    private final TasksAdapter adapter = new TasksAdapter(tasks, this);
+    private final TasksAdapter adapter = new TasksAdapter(tasks, projects, this);
 
     /**
      * The sort method to be used to display tasks
@@ -50,32 +53,41 @@ public class TaskListFragment extends Fragment implements TasksAdapter.DeleteTas
     private SortMethod sortMethod = SortMethod.NONE;
 
     /**
-     * The dialog to create a new task
+     * ViewModel containing list of Tasks to observe
      */
-    @Nullable
-    public TaskDialog taskDialog = null;
+    private ListTasksViewModel listTasksViewModel;
+
+    /**
+     * ViewModel containing list of existing projects
+     */
+    private ListProjectsViewModel listProjectsViewModel;
 
     public TaskListFragment() { /* Empty constructor */ }
 
     public static TaskListFragment newInstance() {
+
         return new TaskListFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         binding = FragmentTaskListBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+
         super.onViewCreated(view, savedInstanceState);
+
         initializeToolbar();
 
         initializeRecyclerView();
@@ -83,21 +95,26 @@ public class TaskListFragment extends Fragment implements TasksAdapter.DeleteTas
         updateTaskDialog();
 
         handleFab();
+        initializeViewModel();
+
     }
 
     @Override
     public void onDestroyView() {
+
         super.onDestroyView();
         binding = null;
     }
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+
         inflater.inflate(R.menu.actions, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
         int id = item.getItemId();
 
         if (id == R.id.filter_alphabetical) sortMethod = SortMethod.ALPHABETICAL;
@@ -111,6 +128,7 @@ public class TaskListFragment extends Fragment implements TasksAdapter.DeleteTas
     }
 
     public void initializeToolbar(){
+
         ((MainActivityCallback) requireActivity()).setToolbarTitle(R.string.app_name);
     }
 
@@ -120,6 +138,7 @@ public class TaskListFragment extends Fragment implements TasksAdapter.DeleteTas
      */
     @Override
     public void onDeleteTask(Task task) {
+
         tasks.remove(task);
         updateTasks();
     }
@@ -137,6 +156,7 @@ public class TaskListFragment extends Fragment implements TasksAdapter.DeleteTas
      * Handles RecyclerView initialization to display Task list
      */
     private void initializeRecyclerView() {
+
         binding.listTasks.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         binding.listTasks.setAdapter(adapter);
     }
@@ -145,9 +165,10 @@ public class TaskListFragment extends Fragment implements TasksAdapter.DeleteTas
      * Handles TaskDialog initialization
      */
     private void updateTaskDialog() {
+
         if( getParentFragmentManager().findFragmentByTag(TaskDialog.TAG_TASK_DIALOG) != null) {
             Fragment fragment =  getParentFragmentManager().findFragmentByTag(TaskDialog.TAG_TASK_DIALOG);
-            ((TaskDialog) fragment).setAllProjects(allProjects);
+            ((TaskDialog) fragment).setAllProjects(projects);
             ((TaskDialog) fragment).setTaskActions(this);
         }
     }
@@ -156,7 +177,8 @@ public class TaskListFragment extends Fragment implements TasksAdapter.DeleteTas
      * Displays Task Dialog
      */
     private void showAddTaskDialog() {
-        taskDialog = new TaskDialog(this, allProjects);
+
+        TaskDialog taskDialog = new TaskDialog(this, projects);
         taskDialog.show(getParentFragmentManager(), TaskDialog.TAG_TASK_DIALOG);
     }
 
@@ -166,21 +188,25 @@ public class TaskListFragment extends Fragment implements TasksAdapter.DeleteTas
      */
     @Override
     public void addTask(@NonNull Task task) {
-        tasks.add(task);
-        updateTasks();
+
+        listTasksViewModel.insertTask(task);
     }
 
     /**
-     * Updates the list of tasks in the UI
+     * Updates the list of tasks and background elements in the UI
      */
     private void updateTasks() {
+
         if (tasks.size() == 0) {
+            // Show background icon and message
             binding.lblNoTask.setVisibility(View.VISIBLE);
             binding.listTasks.setVisibility(View.GONE);
         }
         else {
+            // Hide background icon and message
             binding.lblNoTask.setVisibility(View.GONE);
             binding.listTasks.setVisibility(View.VISIBLE);
+            // Sort list of Tasks
             switch (sortMethod) {
                 case ALPHABETICAL:
                     Collections.sort(tasks, new Task.TaskAZComparator());
@@ -197,5 +223,32 @@ public class TaskListFragment extends Fragment implements TasksAdapter.DeleteTas
             }
             adapter.updateTasks(tasks);
         }
+    }
+
+    /**
+     * Uses the observer pattern to observe LiveData of ListTasks and ListProjects
+     */
+    private void initializeViewModel() {
+
+        // Initiates a Factory to create ViewModel instances
+        ViewModelFactory factory = new ViewModelFactory(getContext());
+        listTasksViewModel = factory.create(ListTasksViewModel.class);
+        listProjectsViewModel = factory.create(ListProjectsViewModel.class);
+
+        // Observer on ListTasks
+        listTasksViewModel.getListTasks().observe(getViewLifecycleOwner(), (List<Task> newTasks) -> {
+                tasks.clear();
+                tasks.addAll(newTasks);
+                updateTasks();
+            }
+        );
+
+        // Observer on ListProjects
+        listProjectsViewModel.getListProjects().observe(getViewLifecycleOwner(), (List<Project> newProjects) -> {
+                projects.clear();
+                projects.addAll(newProjects);
+                adapter.updateProjects(projects);
+            }
+        );
     }
 }

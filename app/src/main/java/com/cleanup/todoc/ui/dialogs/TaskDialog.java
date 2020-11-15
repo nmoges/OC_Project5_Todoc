@@ -16,6 +16,7 @@ import com.cleanup.todoc.model.Project;
 import com.cleanup.todoc.model.Task;
 import com.cleanup.todoc.ui.fragments.TaskActions;
 import java.util.Date;
+import java.util.List;
 
 public class TaskDialog extends DialogFragment {
 
@@ -26,11 +27,11 @@ public class TaskDialog extends DialogFragment {
     private AlertDialog dialog = null;
     private TaskActions taskActions = null;
 
-    private Project[] allProjects;
+    private List<Project> allProjects;
 
     public TaskDialog() {/* Empty constructor */}
 
-    public TaskDialog(TaskActions taskActions, Project[] allProjects) {
+    public TaskDialog(TaskActions taskActions, List<Project> allProjects) {
 
         this.taskActions = taskActions;
         this.allProjects = allProjects;
@@ -41,7 +42,7 @@ public class TaskDialog extends DialogFragment {
         this.taskActions = taskActions;
     }
 
-    public void setAllProjects(Project[] allProjects) {
+    public void setAllProjects(List<Project> allProjects) {
 
         this.allProjects = allProjects;
     }
@@ -64,7 +65,6 @@ public class TaskDialog extends DialogFragment {
                     .setOnDismissListener((DialogInterface dialog) -> {
                             dialogEditText = null;
                             dialogSpinner = null;
-                            //  dialog = null;
                         }
                     );
 
@@ -107,10 +107,7 @@ public class TaskDialog extends DialogFragment {
 
             // If both project and name of the task have been set
             else if (taskProject != null) {
-                // TODO(): Replace this by id of persisted task
-                long id = (long) (Math.random() * 50000);
-
-                Task task = new Task(id, taskProject.getProjectId(), taskName, new Date().getTime());
+                Task task = new Task(taskProject.getId(), taskName, new Date().getTime());
 
                 taskActions.addTask(task);
                 dialogInterface.dismiss();

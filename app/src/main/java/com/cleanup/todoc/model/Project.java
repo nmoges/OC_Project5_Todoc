@@ -3,7 +3,6 @@ package com.cleanup.todoc.model;
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -18,31 +17,27 @@ public class Project {
      * The unique identifier of the project
      */
     @PrimaryKey(autoGenerate = true)
-    private final long projectId;
+    public int id;
 
     /**
      * The name of the project
      */
-    @ColumnInfo(name = "name_project")
     @NonNull
     private final String name;
 
     /**
      * The hex (ARGB) code of the color associated to the project
      */
-    @ColumnInfo(name = "color_project")
     @ColorInt
     private final int color;
 
+
     /**
      * Instantiates a new Project.
-     *
-     * @param projectId    the unique identifier of the project to set
      * @param name  the name of the project to set
      * @param color the hex (ARGB) code of the color associated to the project to set
      */
-    public Project(long projectId, @NonNull String name, @ColorInt int color) {
-        this.projectId = projectId;
+    public Project(@NonNull String name, @ColorInt int color) {
         this.name = name;
         this.color = color;
     }
@@ -52,12 +47,11 @@ public class Project {
      *
      * @return all the projects of the application
      */
-    @NonNull
     public static Project[] getAllProjects() {
         return new Project[]{
-                new Project(1L, "Projet Tartampion", 0xFFEADAD1),
-                new Project(2L, "Projet Lucidia", 0xFFB4CDBA),
-                new Project(3L, "Projet Circus", 0xFFA3CED2),
+                new Project("Projet Tartampion", 0xFFEADAD1),
+                new Project("Projet Lucidia", 0xFFB4CDBA),
+                new Project("Projet Circus", 0xFFA3CED2)
         };
     }
 
@@ -69,9 +63,9 @@ public class Project {
      * @return the project with the given unique identifier, or null if it has not been found
      */
     @Nullable
-    public static Project getProjectById(long projectId) {
+    public static Project getProjectById(int projectId) {
         for (Project project : getAllProjects()) {
-            if (project.projectId == projectId)
+            if (project.id == projectId)
                 return project;
         }
         return null;
@@ -82,8 +76,8 @@ public class Project {
      *
      * @return the unique identifier of the project
      */
-    public long getProjectId() {
-        return projectId;
+    public int getId() {
+        return id;
     }
 
     /**
