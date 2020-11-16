@@ -3,19 +3,26 @@
 
     <string name="label_action_filter">Filter</string>
 
+    <!-- Sort options -->
     <string name="sort_alphabetical">A -&gt; Z</string>
     <string name="sort_alphabetical_invert">Z -&gt; A</string>
     <string name="sort_oldest_first">Les plus anciens d’abord</string>
     <string name="sort_recent_first">Les plus récents d’abord</string>
 
+    <!-- TaskDialog -->
     <string name="add_task">Ajouter une tâche</string>
+    <string name="task_name_hint">Nom de la tâche</string>
     <string name="add">Ajouter</string>
 
+    <!-- UpdateTaskDialog -->
+    <string name="update_task">Modifier une tâche</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Annuler</string>
+
+    <!-- TaskFragment background -->
     <string name="no_task">Tu n’as aucune tâche à traiter</string>
 
-    <string name="task_name_hint">Nom de la tâche</string>
-
     <string name="empty_task_name">Le nom de la tâche doit être renseigné</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
 </resources>

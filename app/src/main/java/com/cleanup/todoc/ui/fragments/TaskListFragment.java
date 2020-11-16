@@ -11,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import com.cleanup.todoc.ui.dialogs.UpdateTaskDialog;
 import com.cleanup.todoc.viewmodel.ListProjectsViewModel;
 import com.cleanup.todoc.viewmodel.ListTasksViewModel;
 import com.cleanup.todoc.R;
@@ -25,8 +26,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class TaskListFragment extends Fragment implements TasksAdapter.DeleteTaskListener, TaskActions {
+public class TaskListFragment extends Fragment implements TaskActions {
 
+    /**
+     * For Fragment View Binding
+     */
     private FragmentTaskListBinding binding;
 
     /**
@@ -92,9 +96,8 @@ public class TaskListFragment extends Fragment implements TasksAdapter.DeleteTas
 
         initializeRecyclerView();
 
-        updateTaskDialog();
-
         handleFab();
+
         initializeViewModel();
 
     }
@@ -127,21 +130,11 @@ public class TaskListFragment extends Fragment implements TasksAdapter.DeleteTas
         return super.onOptionsItemSelected(item);
     }
 
-    public void initializeToolbar(){
+    public void initializeToolbar() {
 
         ((MainActivityCallback) requireActivity()).setToolbarTitle(R.string.app_name);
     }
 
-    /**
-     * TaskAdapter.DeleteTaskListener interface implementation
-     * @param task : the task that needs to be deleted
-     */
-    @Override
-    public void onDeleteTask(Task task) {
-
-        tasks.remove(task);
-        updateTasks();
-    }
 
     /**
      * Handles Floating Action Button click.
@@ -162,18 +155,6 @@ public class TaskListFragment extends Fragment implements TasksAdapter.DeleteTas
     }
 
     /**
-     * Handles TaskDialog initialization
-     */
-    private void updateTaskDialog() {
-
-        if( getParentFragmentManager().findFragmentByTag(TaskDialog.TAG_TASK_DIALOG) != null) {
-            Fragment fragment =  getParentFragmentManager().findFragmentByTag(TaskDialog.TAG_TASK_DIALOG);
-            ((TaskDialog) fragment).setAllProjects(projects);
-            ((TaskDialog) fragment).setTaskActions(this);
-        }
-    }
-
-    /**
      * Displays Task Dialog
      */
     private void showAddTaskDialog() {
@@ -187,9 +168,30 @@ public class TaskListFragment extends Fragment implements TasksAdapter.DeleteTas
      * @param task : the task to be added to the list
      */
     @Override
-    public void addTask(@NonNull Task task) {
+    public void onAddTask(@NonNull Task task) {
 
         listTasksViewModel.insertTask(task);
+    }
+
+    /**
+     * TaskAdapter.DeleteTaskListener interface implementation
+     * @param task : the task that needs to be deleted
+     */
+    @Override
+    public void onDeleteTask(@NonNull Task task) {
+
+        listTasksViewModel.deleteTask(task);
+    }
+
+    @Override
+    public void onOpenDialogForUpdateTask(@NonNull Task task) {
+        UpdateTaskDialog dialog = new UpdateTaskDialog(this, task, projects);
+        dialog.show(getParentFragmentManager(), UpdateTaskDialog.TAG_UPDATE_TASK_DIALOG);
+    }
+
+    @Override
+    public void onUpdateTask(@NonNull Task task) {
+        listTasksViewModel.updateTask(task);
     }
 
     /**
@@ -251,4 +253,5 @@ public class TaskListFragment extends Fragment implements TasksAdapter.DeleteTas
             }
         );
     }
+
 }

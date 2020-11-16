@@ -8,15 +8,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import android.view.LayoutInflater;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import com.cleanup.todoc.R;
 import com.cleanup.todoc.model.Project;
 import com.cleanup.todoc.model.Task;
 import com.cleanup.todoc.ui.fragments.TaskActions;
+import com.cleanup.todoc.utils.SpinnerInitializer;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class TaskDialog extends DialogFragment {
 
@@ -26,8 +27,9 @@ public class TaskDialog extends DialogFragment {
     private Spinner dialogSpinner;
     private AlertDialog dialog = null;
     private TaskActions taskActions = null;
-
     private List<Project> allProjects;
+
+    private int item_selected = 0;
 
     public TaskDialog() {/* Empty constructor */}
 
@@ -37,19 +39,12 @@ public class TaskDialog extends DialogFragment {
         this.allProjects = allProjects;
     }
 
-    public void setTaskActions(TaskActions taskActions) {
-
-        this.taskActions = taskActions;
-    }
-
-    public void setAllProjects(List<Project> allProjects) {
-
-        this.allProjects = allProjects;
-    }
-
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        if(savedInstanceState != null) {
+            item_selected = savedInstanceState.getInt("item_selected");
+        }
 
         // Retain current DialogFragment instance
         setRetainInstance(true);
@@ -82,8 +77,8 @@ public class TaskDialog extends DialogFragment {
 
     public void initializeViews() {
 
-        dialogEditText = getDialog().findViewById(R.id.txt_task_name);
-        dialogSpinner = getDialog().findViewById(R.id.project_spinner);
+        dialogEditText = Objects.requireNonNull(getDialog()).findViewById(R.id.txt_task_name);
+        dialogSpinner = Objects.requireNonNull(getDialog()).findViewById(R.id.project_spinner);
     }
 
 
@@ -109,7 +104,7 @@ public class TaskDialog extends DialogFragment {
             else if (taskProject != null) {
                 Task task = new Task(taskProject.getId(), taskName, new Date().getTime());
 
-                taskActions.addTask(task);
+                taskActions.onAddTask(task);
                 dialogInterface.dismiss();
             }
             // If name has been set, but project has not been set (this should never occur)
@@ -123,21 +118,18 @@ public class TaskDialog extends DialogFragment {
         }
     }
 
-    public Dialog getDialog() {
-
-        return this.dialog;
-    }
 
     /**
      * Sets the data of the Spinner with projects to associate to a new task
      */
     public void populateDialogSpinner() {
 
-        final ArrayAdapter<Project> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, allProjects);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        if (dialogSpinner != null) {
-            dialogSpinner.setAdapter(adapter);
-        }
+        SpinnerInitializer.populateDialogSpinner(getContext(), dialogSpinner, allProjects, item_selected);
     }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("item_selected", dialogSpinner.getSelectedItemPosition());
+    }
 }
