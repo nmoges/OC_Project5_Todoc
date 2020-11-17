@@ -24,5 +24,8 @@
 
     <string name="empty_task_name">Le nom de la tâche doit être renseigné</string>
 
+    <!-- SnackBar -->
+    <string name="snack_btn">Annuler</string>
+    <string name="snack_txt">Tâche supprimée</string>
 
 </resources>

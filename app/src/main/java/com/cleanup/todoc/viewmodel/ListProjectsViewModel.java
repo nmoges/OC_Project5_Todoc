@@ -3,10 +3,10 @@ package com.cleanup.todoc.viewmodel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import com.cleanup.todoc.database.TodocDatabase;
 import com.cleanup.todoc.model.Project;
 import com.cleanup.todoc.repositories.ProjectRepository;
 import java.util.List;
+import java.util.concurrent.Executor;
 
 /**
  * ViewModel class containing the list of existing Projects, wrapped in LiveData
@@ -23,8 +23,14 @@ public class ListProjectsViewModel extends ViewModel {
      */
     private LiveData<List<Project>> listProjects = new MutableLiveData<>();
 
-    public ListProjectsViewModel(ProjectRepository projectRepository) {
+    /**
+     * Executor to access Database in another thread than UI thread
+     */
+    private final Executor executor;
+
+    public ListProjectsViewModel(final ProjectRepository projectRepository, final Executor executor) {
         this.projectRepository = projectRepository;
+        this.executor = executor;
     }
 
     public LiveData<List<Project>> getListProjects() {
@@ -39,15 +45,7 @@ public class ListProjectsViewModel extends ViewModel {
 
     // Project Repository methods
     public void insertProject(Project project) {
-        TodocDatabase.executorService.execute(() -> projectRepository.insertProject(project));
-    }
-
-    public void deleteProject(Project project) {
-        TodocDatabase.executorService.execute(() -> projectRepository.deleteProject(project));
-    }
-
-    public void update(Project project) {
-        TodocDatabase.executorService.execute(() -> projectRepository.updateProject(project));
+        executor.execute(() -> projectRepository.insertProject(project));
     }
 
     @Override

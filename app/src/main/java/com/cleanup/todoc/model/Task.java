@@ -1,7 +1,6 @@
 package com.cleanup.todoc.model;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
@@ -54,17 +53,24 @@ public class Task {
         this.setCreationTimestamp(creationTimestamp);
     }
 
+    /**
+     * Return the id of the associated Project
+     * @return : id of the Project
+     */
     public int getProjectId() {
         return projectId;
     }
 
+    /**
+     * Return timestamp of the task
+     * @return : time when task was created
+     */
     public long getCreationTimestamp() {
         return creationTimestamp;
     }
 
     /**
      * Returns the unique identifier of the task.
-     *
      * @return the unique identifier of the task
      */
     public int getId() {
@@ -72,17 +78,7 @@ public class Task {
     }
 
     /**
-     * Sets the unique identifier of the task.
-     *
-     * @param taskId the unique identifier of the task to set
-     */
-    private void setTaskId(int taskId) {
-        this.id = id;
-    }
-
-    /**
      * Sets the unique identifier of the project associated to the task.
-     *
      * @param projectId the unique identifier of the project associated to the task to set
      */
     public void setProjectId(int projectId) {
@@ -90,18 +86,7 @@ public class Task {
     }
 
     /**
-     * Returns the project associated to the task.
-     *
-     * @return the project associated to the task
-     */
-    @Nullable
-    public Project getProject() {
-        return Project.getProjectById(projectId);
-    }
-
-    /**
      * Returns the name of the task.
-     *
      * @return the name of the task
      */
     @NonNull
@@ -125,45 +110,5 @@ public class Task {
      */
     private void setCreationTimestamp(long creationTimestamp) {
         this.creationTimestamp = creationTimestamp;
-    }
-
-    /**
-     * Comparator to sort task from A to Z
-     */
-    public static class TaskAZComparator implements Comparator<Task> {
-        @Override
-        public int compare(Task left, Task right) {
-            return left.name.toUpperCase().compareTo(right.name.toUpperCase());
-        }
-    }
-
-    /**
-     * Comparator to sort task from Z to A
-     */
-    public static class TaskZAComparator implements Comparator<Task> {
-        @Override
-        public int compare(Task left, Task right) {
-            return right.name.toUpperCase().compareTo(left.name.toUpperCase());
-        }
-    }
-
-    /**
-     * Comparator to sort task from last created to first created
-     */
-    public static class TaskRecentComparator implements Comparator<Task> {
-        @Override
-        public int compare(Task left, Task right) {
-            return (int) (right.creationTimestamp - left.creationTimestamp);
-        }
-    }
-
-    /**
-     * Comparator to sort task from first created to last created
-     */
-    public static class TaskOldComparator implements Comparator<Task> {
-        @Override
-        public int compare(Task left, Task right) {
-            return (int) (left.creationTimestamp - right.creationTimestamp);
-        }
     }
 }

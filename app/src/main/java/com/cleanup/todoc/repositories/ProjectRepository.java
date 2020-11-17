@@ -26,15 +26,6 @@ public class ProjectRepository {
         projectDao.insertProject(project);
     }
 
-    // TODO() : Functionality not implemented yet
-    public void updateProject(Project project) {
-        projectDao.updateProject(project);
-    }
-
-    public void deleteProject(Project project) {
-        projectDao.deleteProject(project);
-    }
-
     // Defined only for testing
     @VisibleForTesting
     public Project getProject(int projectId) {

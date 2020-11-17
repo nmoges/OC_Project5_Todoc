@@ -1,9 +1,12 @@
 package com.cleanup.todoc.ui.fragments;
 
 import android.os.Bundle;
+
+import androidx.annotation.ColorLong;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -12,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import com.cleanup.todoc.ui.dialogs.UpdateTaskDialog;
+import com.cleanup.todoc.utils.TaskComparators;
 import com.cleanup.todoc.viewmodel.ListProjectsViewModel;
 import com.cleanup.todoc.viewmodel.ListTasksViewModel;
 import com.cleanup.todoc.R;
@@ -22,9 +26,13 @@ import com.cleanup.todoc.model.Task;
 import com.cleanup.todoc.ui.activities.MainActivityCallback;
 import com.cleanup.todoc.utils.SortMethod;
 import com.cleanup.todoc.ui.dialogs.TaskDialog;
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+//TODO() : Add loader
 
 public class TaskListFragment extends Fragment implements TaskActions {
 
@@ -181,14 +189,35 @@ public class TaskListFragment extends Fragment implements TaskActions {
     public void onDeleteTask(@NonNull Task task) {
 
         listTasksViewModel.deleteTask(task);
+
+        cancelDeleteAction(task);
     }
 
+    /**
+     * Called to allow user to cancel previous delete action and restore Task
+     * @param taskToRestore : task to restore
+     */
+    public void cancelDeleteAction(Task taskToRestore) {
+
+        Snackbar.make(binding.coordinatorFragment, R.string.snack_txt, Snackbar.LENGTH_LONG)
+                .setAction(R.string.snack_btn, (View v) -> listTasksViewModel.insertTask(taskToRestore))
+                .show();
+    }
+
+    /**
+     * Called after click on existing Task in the list. Allows user to modify this Task.
+     * @param task
+     */
     @Override
     public void onOpenDialogForUpdateTask(@NonNull Task task) {
         UpdateTaskDialog dialog = new UpdateTaskDialog(this, task, projects);
         dialog.show(getParentFragmentManager(), UpdateTaskDialog.TAG_UPDATE_TASK_DIALOG);
     }
 
+    /**
+     * Called after user confirmation that the Task is modified. New Task replaces old one
+     * @param task
+     */
     @Override
     public void onUpdateTask(@NonNull Task task) {
         listTasksViewModel.updateTask(task);
@@ -211,16 +240,16 @@ public class TaskListFragment extends Fragment implements TaskActions {
             // Sort list of Tasks
             switch (sortMethod) {
                 case ALPHABETICAL:
-                    Collections.sort(tasks, new Task.TaskAZComparator());
+                    Collections.sort(tasks, new TaskComparators.TaskAZComparator());
                     break;
                 case ALPHABETICAL_INVERTED:
-                    Collections.sort(tasks, new Task.TaskZAComparator());
+                    Collections.sort(tasks, new TaskComparators.TaskZAComparator());
                     break;
                 case RECENT_FIRST:
-                    Collections.sort(tasks, new Task.TaskRecentComparator());
+                    Collections.sort(tasks, new TaskComparators.TaskRecentComparator());
                     break;
                 case OLD_FIRST:
-                    Collections.sort(tasks, new Task.TaskOldComparator());
+                    Collections.sort(tasks, new TaskComparators.TaskOldComparator());
                     break;
             }
             adapter.updateTasks(tasks);
@@ -234,6 +263,7 @@ public class TaskListFragment extends Fragment implements TaskActions {
 
         // Initiates a Factory to create ViewModel instances
         ViewModelFactory factory = new ViewModelFactory(getContext());
+
         listTasksViewModel = factory.create(ListTasksViewModel.class);
         listProjectsViewModel = factory.create(ListProjectsViewModel.class);
 

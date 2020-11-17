@@ -1,12 +1,17 @@
 package com.cleanup.todoc.viewmodel;
 
+import android.content.Context;
+
+import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import com.cleanup.todoc.database.TodocDatabase;
+
+import com.cleanup.todoc.di.DI;
 import com.cleanup.todoc.model.Task;
 import com.cleanup.todoc.repositories.TaskRepository;
 import java.util.List;
+import java.util.concurrent.Executor;
 
 /**
  * ViewModel class containing the list of existing Tasks, wrapped in LiveData
@@ -23,8 +28,14 @@ public class ListTasksViewModel extends ViewModel {
      */
     private LiveData<List<Task>> listTasks = new MutableLiveData<>();
 
-    public ListTasksViewModel(TaskRepository taskRepository) {
+    /**
+     * Executor to access Database in another thread than UI thread
+     */
+    private final Executor executor;
+
+    public ListTasksViewModel(final TaskRepository taskRepository, final Executor executor) {
         this.taskRepository = taskRepository;
+        this.executor = executor;
     }
 
     public LiveData<List<Task>> getListTasks() {
@@ -39,15 +50,15 @@ public class ListTasksViewModel extends ViewModel {
 
     // Task Repository methods
     public void insertTask(Task task) {
-        TodocDatabase.executorService.execute(() -> taskRepository.insertTask(task));
-    }
-
-    public void deleteTask(Task task) {
-        TodocDatabase.executorService.execute(() -> taskRepository.deleteTask(task));
+        executor.execute(() -> taskRepository.insertTask(task));
     }
 
     public void updateTask(Task task) {
-        TodocDatabase.executorService.execute(() -> taskRepository.updateTask(task));
+        executor.execute(() -> taskRepository.updateTask(task));
+    }
+
+    public void deleteTask(Task task) {
+        executor.execute(() -> taskRepository.deleteTask(task));
     }
 
     @Override

@@ -26,13 +26,12 @@ public class TaskRepository {
         taskDao.insertTask(task);
     }
 
-    // TODO() : Functionality not implemented yet
     public void updateTask(Task task) {
         taskDao.updateTask(task);
     }
 
-    public void deleteTask(Task task) {
-        taskDao.deleteTask(task);
+    public int deleteTask(Task task) {
+        return taskDao.deleteTask(task);
     }
 
     // Defined only for testing
