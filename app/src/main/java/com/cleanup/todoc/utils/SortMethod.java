@@ -1,7 +1,7 @@
 package com.cleanup.todoc.utils;
 
 /**
- * List of all possible sort methods for task
+ * <p>List of all possible sort methods for task</p>
  */
 public enum SortMethod {
     /**
@@ -20,6 +20,10 @@ public enum SortMethod {
      * First created first
      */
     OLD_FIRST,
+    /**
+     * By project
+     */
+    BY_PROJECT,
     /**
      * No sort
      */

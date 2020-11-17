@@ -1,20 +1,15 @@
 package com.cleanup.todoc.viewmodel;
 
-import android.content.Context;
-
-import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
-import com.cleanup.todoc.di.DI;
 import com.cleanup.todoc.model.Task;
 import com.cleanup.todoc.repositories.TaskRepository;
 import java.util.List;
 import java.util.concurrent.Executor;
 
 /**
- * ViewModel class containing the list of existing Tasks, wrapped in LiveData
+ * <p>ViewModel class containing the list of existing Tasks, wrapped in LiveData</p>
  */
 public class ListTasksViewModel extends ViewModel {
 

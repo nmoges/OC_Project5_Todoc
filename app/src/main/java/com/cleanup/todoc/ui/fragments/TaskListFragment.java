@@ -1,12 +1,9 @@
 package com.cleanup.todoc.ui.fragments;
 
 import android.os.Bundle;
-
-import androidx.annotation.ColorLong;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,13 +24,15 @@ import com.cleanup.todoc.ui.activities.MainActivityCallback;
 import com.cleanup.todoc.utils.SortMethod;
 import com.cleanup.todoc.ui.dialogs.TaskDialog;
 import com.google.android.material.snackbar.Snackbar;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 //TODO() : Add loader
 
+/**
+ * <p>Fragment used to display to user the list of all existing Task, and allowing him to create of modify Task</p>
+ */
 public class TaskListFragment extends Fragment implements TaskActions {
 
     /**
@@ -132,6 +131,7 @@ public class TaskListFragment extends Fragment implements TaskActions {
         else if (id == R.id.filter_alphabetical_inverted) sortMethod = SortMethod.ALPHABETICAL_INVERTED;
         else if (id == R.id.filter_oldest_first) sortMethod = SortMethod.OLD_FIRST;
         else if (id == R.id.filter_recent_first) sortMethod = SortMethod.RECENT_FIRST;
+        else if (id == R.id.filter_by_project) sortMethod = SortMethod.BY_PROJECT;
 
         updateTasks();
 
@@ -250,6 +250,9 @@ public class TaskListFragment extends Fragment implements TaskActions {
                     break;
                 case OLD_FIRST:
                     Collections.sort(tasks, new TaskComparators.TaskOldComparator());
+                    break;
+                case BY_PROJECT:
+                    Collections.sort(tasks, new TaskComparators.ProjectComparator(getContext()));
                     break;
             }
             adapter.updateTasks(tasks);

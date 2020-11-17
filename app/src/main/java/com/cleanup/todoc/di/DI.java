@@ -8,7 +8,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 /**
- * Dependency injector
+ * <p>Dependency injector</p>
  */
 public class DI {
 

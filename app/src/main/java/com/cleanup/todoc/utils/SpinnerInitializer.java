@@ -7,7 +7,7 @@ import com.cleanup.todoc.model.Project;
 import java.util.List;
 
 /**
- * Sets the data of the Spinner with projects to associate to a new task
+ * <p>Sets the data of the Spinner with projects to associate to a new task</p>
  */
 public class SpinnerInitializer {
 

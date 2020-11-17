@@ -2,9 +2,6 @@ package com.cleanup.todoc.database;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
-
-import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
@@ -15,9 +12,9 @@ import com.cleanup.todoc.model.Project;
 import com.cleanup.todoc.model.Task;
 
 /**
- * This class defines Todoc database which contains two tables :
+ * <p>This class defines Todoc database which contains two tables :
  *      - project_table
- *      - task_table
+ *      - task_table</p>
  */
 // TODO() : Implement migration strategy
 @Database(entities = {Task.class, Project.class}, version = 1)

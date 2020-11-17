@@ -19,6 +19,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * <p>Dialog used to create a new Task</p>
+ */
 public class TaskDialog extends DialogFragment {
 
     public final static String TAG_TASK_DIALOG = "TAG_TASK_DIALOG";

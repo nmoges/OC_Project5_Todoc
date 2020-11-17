@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 
 /**
- * ViewModel class containing the list of existing Projects, wrapped in LiveData
+ * <p>ViewModel class containing the list of existing Projects, wrapped in LiveData</p>
  */
 public class ListProjectsViewModel extends ViewModel {
 

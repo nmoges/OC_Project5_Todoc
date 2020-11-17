@@ -11,7 +11,18 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
     }
+
+    sourceSets {
+        androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -26,6 +37,7 @@ android {
     lintOptions {
         disable 'RestrictedApi'
     }
+
     compileOptions {
         targetCompatibility JavaVersion.VERSION_1_8
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -52,9 +64,6 @@ dependencies {
 
     // Constraint Layout
     implementation "androidx.constraintlayout:constraintlayout:$constraint_version"
-
-    // Legacy Support
-    //implementation "androidx.legacy:legacy-support-v4:$legacy_version"
 
     // AppCompat
     implementation "androidx.appcompat:appcompat:$appcompat_version"

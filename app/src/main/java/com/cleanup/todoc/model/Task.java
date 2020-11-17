@@ -5,12 +5,11 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
-import java.util.Comparator;
 
 /**
  * <p>Model for the tasks of the application.</p>
  *
- * @author Gaëtan HERFRAY
+ * @author Gaëtan HERFRAY (update : Nicolas MOGES)
  */
 @Entity(tableName = "task_table",
         foreignKeys = @ForeignKey(entity = Project.class, parentColumns = "id", childColumns = "project_id"))

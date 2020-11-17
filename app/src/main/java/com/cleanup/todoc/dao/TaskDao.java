@@ -12,7 +12,7 @@ import com.cleanup.todoc.model.Task;
 import java.util.List;
 
 /**
- * DAO interface defining methods to access task_table data
+ * <p>DAO interface defining methods to access task_table data</p>
  */
 @Dao
 public interface TaskDao {

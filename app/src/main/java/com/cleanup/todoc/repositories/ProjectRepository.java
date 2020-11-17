@@ -7,8 +7,8 @@ import com.cleanup.todoc.model.Project;
 import java.util.List;
 
 /**
- * Repository class to communicate with project_table from TodocDatabase,
- * using ProjectDao interface methods
+ * <p>Repository class to communicate with project_table from TodocDatabase,
+ * using ProjectDao interface methods</p>
  */
 public class ProjectRepository {
 

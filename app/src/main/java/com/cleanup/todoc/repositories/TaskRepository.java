@@ -7,8 +7,8 @@ import com.cleanup.todoc.model.Task;
 import java.util.List;
 
 /**
- * Repository class to communicate with task_table from TodocDatabase,
- * using TaskDao interface methods
+ * <p>Repository class to communicate with task_table from TodocDatabase,
+ * using TaskDao interface methods</p>
  */
 public class TaskRepository {
 

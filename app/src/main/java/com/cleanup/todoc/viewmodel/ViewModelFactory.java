@@ -11,7 +11,7 @@ import com.cleanup.todoc.repositories.TaskRepository;
 import java.util.concurrent.Executor;
 
 /**
- * Factory class used to create LiveDataListTasksVM ViewModel
+ * <p>Factory class used to create LiveDataListTasksVM ViewModel</p>
  */
 //TODO() : remove Factory class
 public class ViewModelFactory implements ViewModelProvider.Factory {

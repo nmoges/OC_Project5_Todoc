@@ -10,7 +10,7 @@ import com.cleanup.todoc.model.Project;
 import java.util.List;
 
 /**
- * DAO interface defining methods to access project_table data
+ * <p>DAO interface defining methods to access project_table data</p>
  */
 @Dao
 public interface ProjectDao {

@@ -18,6 +18,9 @@ import com.cleanup.todoc.utils.SpinnerInitializer;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * <p>Dialog used to modify an existing</p>
+ */
 public class UpdateTaskDialog extends DialogFragment {
 
     public final static String TAG_UPDATE_TASK_DIALOG = "TAG_UPDATE_TASK_DIALOG";

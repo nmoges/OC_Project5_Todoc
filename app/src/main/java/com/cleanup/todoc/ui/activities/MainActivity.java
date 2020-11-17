@@ -6,12 +6,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.cleanup.todoc.database.TodocDatabase;
 import com.cleanup.todoc.databinding.ActivityMainBinding;
 
-
 /**
  * <p>Home activity of the application which is displayed when the user opens the app.</p>
  * <p>Displays the list of tasks.</p>
  *
- * @author Gaëtan HERFRAY
+ * @author Gaëtan HERFRAY (update : Nicolas MOGES)
  */
 public class MainActivity extends AppCompatActivity implements MainActivityCallback {
 
