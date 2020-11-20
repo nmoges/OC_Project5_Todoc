@@ -1,6 +1,5 @@
 package com.cleanup.todoc.repositories;
 
-import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.LiveData;
 import com.cleanup.todoc.dao.ProjectDao;
 import com.cleanup.todoc.model.Project;
@@ -27,7 +26,6 @@ public class ProjectRepository {
     }
 
     // Defined only for testing
-    @VisibleForTesting
     public Project getProject(int projectId) {
         return projectDao.getProject(projectId);
     }

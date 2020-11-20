@@ -26,8 +26,8 @@ public class TaskRepository {
         taskDao.insertTask(task);
     }
 
-    public void updateTask(Task task) {
-        taskDao.updateTask(task);
+    public int updateTask(Task task) {
+        return taskDao.updateTask(task);
     }
 
     public int deleteTask(Task task) {
@@ -42,5 +42,9 @@ public class TaskRepository {
 
     public LiveData<List<Task>> loadAllTasks() {
         return taskDao.loadAllTask();
+    }
+
+    public void deleteAllTask() {
+        taskDao.deleteAllTasks();;
     }
 }

@@ -1,7 +1,6 @@
 package com.cleanup.todoc.database;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
@@ -16,7 +15,6 @@ import com.cleanup.todoc.model.Task;
  *      - project_table
  *      - task_table</p>
  */
-// TODO() : Implement migration strategy
 @Database(entities = {Task.class, Project.class}, version = 1)
 public abstract class TodocDatabase extends RoomDatabase {
 
@@ -33,26 +31,19 @@ public abstract class TodocDatabase extends RoomDatabase {
 
             // Create instance
             instance = Room.databaseBuilder(context, TodocDatabase.class, "task_database")
+                    .fallbackToDestructiveMigration()
                     .build();
 
-            // Check if Database has already be initialized
-            SharedPreferences initialized = context.getSharedPreferences("database_status", Context.MODE_PRIVATE);
-
-            // If not : Initialize by inserting items in project_table
-            if(!initialized.getBoolean("database_initialized", false)){
-                DI.provideExecutor().execute(() -> {
-                            Project[] projects = DI.providesProjects(context);
-                            for (Project project : projects) {
-                                instance.projectDao().insertProject(project);
-                            }
+            // Check if data already exists in parent table
+            DI.provideExecutor().execute(() -> {
+                    if (instance.projectDao().getProject(1) == null) {
+                        Project[] projects = DI.providesProjects(context);
+                        for (Project project : projects) {
+                            instance.projectDao().insertProject(project);
                         }
-                );
-
-                // Saving state
-                SharedPreferences.Editor editor = initialized.edit();
-                editor.putBoolean("database_initialized", true);
-                editor.apply();
-            }
+                    }
+                }
+            );
 
         }
         return instance;

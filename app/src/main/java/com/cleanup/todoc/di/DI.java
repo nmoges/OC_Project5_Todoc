@@ -1,6 +1,9 @@
 package com.cleanup.todoc.di;
 
 import android.content.Context;
+
+import androidx.room.RoomDatabase;
+
 import com.cleanup.todoc.R;
 import com.cleanup.todoc.database.TodocDatabase;
 import com.cleanup.todoc.model.Project;
@@ -36,9 +39,10 @@ public class DI {
     public static Project[] providesProjects(Context context) {
 
         return new Project[]{
-                new Project("Projet Tartampion", context.getResources().getColor(R.color.project_tartampion)),
-                new Project("Projet Lucidia", context.getResources().getColor(R.color.project_lucidia)),
-                new Project("Projet Circus", context.getResources().getColor(R.color.project_circus))
+                new Project(context.getResources().getString(R.string.project_tartampion), context.getResources().getColor(R.color.project_tartampion)),
+                new Project(context.getResources().getString(R.string.project_lucidia), context.getResources().getColor(R.color.project_lucidia)),
+                new Project(context.getResources().getString(R.string.project_circus), context.getResources().getColor(R.color.project_circus))
         };
+
     }
 }

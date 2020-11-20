@@ -29,4 +29,8 @@
     <string name="snack_btn">Annuler</string>
     <string name="snack_txt">Tâche supprimée</string>
 
+    <!-- Name projects -->
+    <string name="project_tartampion">Projet Tartampion</string>
+    <string name="project_lucidia">Projet Lucidia</string>
+    <string name="project_circus">Projet Circus</string>
 </resources>

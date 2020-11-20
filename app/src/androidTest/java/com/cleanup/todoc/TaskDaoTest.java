@@ -1,7 +1,8 @@
 package com.cleanup.todoc;
 
 import android.content.Context;
-import android.util.Log;
+
+import androidx.lifecycle.ViewModelProvider;
 import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -24,20 +25,14 @@ import static org.junit.Assert.assertEquals;
 /**
  * This file tests all TaskDAO interface methods to access task_database
  */
-// TODO() : replace current file with file testing ViewModelTask
-
 @RunWith(AndroidJUnit4.class)
-public class TaskRepositoryTest {
+public class TaskDaoTest {
 
     private TodocDatabase database;
     private Project[] allProjects;
-    private final static int FIRST_TASK_ID = 1;
-
-    private TaskRepository taskRepository;
 
     private ListTasksViewModel listTasksViewModel;
-
-
+    //TODO() : to update
     @Before
     public void initDatabase() {
         Context context = ApplicationProvider.getApplicationContext();
@@ -51,7 +46,8 @@ public class TaskRepositoryTest {
 
         // Initialize Repositories
         ProjectRepository projectRepository = new ProjectRepository(database.projectDao());
-        taskRepository = new TaskRepository(database.taskDao());
+        TaskRepository taskRepository = new TaskRepository(database.taskDao());
+
 
         // Initialize project_table in database
         allProjects = DI.providesProjects(context);
@@ -68,34 +64,26 @@ public class TaskRepositoryTest {
     /**
      * This test :
      *          - creates a new task to insert in task_table
-     *          - uses TaskRepository to insert the task
-     *          - uses TaskRepository to read back the task
+     *          - uses TaskDao to insert the task
+     *          - uses TaskDao to read back the task
      *          - checks if the read data is correct
      */
     @Test
-    public void insertNewTaskInTable() {
+    public void insert_new_task_in_table() {
 
         // Create Task to insert in task_table
-        long creationTimestamp = new Date().getTime();
-        String nameTask = "Appeler le client";
-
-        //Task task = new Task(FIRST_TASK_ID, 1L, nameTask, creationTimestamp);
-        Task task = new Task(1, nameTask, creationTimestamp);
+        Task task = new Task(1, "Appeler le client", new Date().getTime());
 
         // Insert task
-        listTasksViewModel.insertTask(task);
+        database.taskDao().insertTask(task);
 
         // Read task from database
-        Task taskRead = taskRepository.getTask(FIRST_TASK_ID);
-
-        if(taskRead == null) Log.i("TASKREAD", "NULL");
-        else Log.i("TASKREAD", "NOT NULL");
+        Task taskRead = database.taskDao().getTask(1);
 
         // Check fields
-        //assertEquals(FIRST_TASK_ID, taskRead.getId());
-        //assertEquals(1, taskRead.getProjectId());
-        //assertEquals(nameTask, taskRead.getName());
-        //assertEquals(creationTimestamp, taskRead.getCreationTimestamp());
+        assertEquals(1, taskRead.getId());
+        assertEquals(1, taskRead.getProjectId());
+        assertEquals("Appeler le client", taskRead.getName());
     }
 
     /**
@@ -108,7 +96,7 @@ public class TaskRepositoryTest {
      *      - checks if operation does not succeed (0 row deleted)
      */
     @Test
-    public void removeTaskFromTable() {
+    public void remove_task_from_table() {
         // Create Tasks to insert in task_table
         Task[] tasks = new Task[]{
                 new Task(1, "Appeler le client", new Date().getTime()),
@@ -117,55 +105,46 @@ public class TaskRepositoryTest {
         };
 
         for(Task task : tasks) {
-            taskRepository.insertTask(task);
+            database.taskDao().insertTask(task);
         }
 
         // Get the task to remove with primaryKey incremented
-        Task taskToRemove = taskRepository.getTask(1);
+        Task taskToRemove = database.taskDao().getTask(1);
 
         // Remove task from database
-        int result = taskRepository.deleteTask(taskToRemove);
-        assertEquals(result, 1); // 1 row deleted
+        int result = database.taskDao().deleteTask(taskToRemove);
+        assertEquals(1, result); // 1 row deleted
 
         // Check if same operation doesn't work (task already removed)
-        result = taskRepository.deleteTask(taskToRemove);
-        assertEquals(result, 0); // 0 row deleted
+        result = database.taskDao().deleteTask(taskToRemove);
+        assertEquals(0, result); // 0 row deleted
     }
 
     @Test
-    public void test() {
+    public void update_task_in_table() {
         // Create Tasks to insert in task_table
-        Task firstTask = new Task(1, "Appeler le client", new Date().getTime());
-        Log.i("TASKTEST", firstTask.getName());
-        // Insert task
-        taskRepository.insertTask(firstTask);
+        Task[] tasks = new Task[]{
+                new Task(1, "Appeler le client", new Date().getTime()),
+                new Task(2, "Intégrer Google Analytics", new Date().getTime()),
+                        new Task(3, "Modifier la couleur des textes", new Date().getTime())
+        };
 
-        // Update task
-        firstTask.setName("Réunion d'avancement");
+        // Store in database
+        for(Task task : tasks) {
+            database.taskDao().insertTask(task);
+        }
 
-        Log.i("TASKTEST", firstTask.getName());
-        taskRepository.updateTask(firstTask);
+        // Get task to modify
+        Task taskToUpdate = database.taskDao().getTask(2);
+        taskToUpdate.setName("Validation software");
 
-        // Read back updated task
-        Task taskToRead = taskRepository.getTask(FIRST_TASK_ID);
-        Log.i("TASKTEST", taskToRead.getName());
+        int result = database.taskDao().updateTask(taskToUpdate);
 
-        //assertEquals(firstTask.getName(), taskToRead.getName());
-        //assertEquals(firstTask.getCreationTimestamp(), taskToRead.getCreationTimestamp());
-        //assertEquals(firstTask.getProjectId(), taskToRead.getProjectId());
+        // Get task modified
+        taskToUpdate = database.taskDao().getTask(2);
 
+        assertEquals(1, result);
+        assertEquals("Validation software", taskToUpdate.getName());
     }
+
 }
-
-
-/*
-
-        Task firstTask = new Task(1, "Appeler le client", new Date().getTime());
-        Task secondTask = new Task(2, "Intégrer Google Analytics", new Date().getTime());
-        Task thirdTask = new Task(3, "Modifier la couleur des textes", new Date().getTime());
-
-        // Insert tasks
-        taskRepository.insertTask(firstTask);
-        taskRepository.insertTask(secondTask);
-        taskRepository.insertTask(thirdTask);
- */

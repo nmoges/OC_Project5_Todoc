@@ -1,9 +1,8 @@
 package com.cleanup.todoc.utils;
 
-import android.content.Context;
-import com.cleanup.todoc.di.DI;
 import com.cleanup.todoc.model.Project;
 import com.cleanup.todoc.model.Task;
+import java.util.ArrayList;
 import java.util.Comparator;
 
 /**
@@ -36,16 +35,15 @@ public class TaskComparators {
      */
     public static class ProjectComparator implements Comparator<Task> {
 
-        private final Context context;
+        private final ArrayList<Project> projects = new ArrayList<>();
 
-        public ProjectComparator(Context context) {
-            this.context = context;
+        public ProjectComparator(ArrayList<Project>projects) {
+            this.projects.addAll(projects);
         }
 
         @Override
         public int compare(Task left, Task right) {
 
-            Project[] projects  = DI.providesProjects(context);
             String leftProjectName = null;
             String rightProjectName = null;
 
@@ -65,17 +63,17 @@ public class TaskComparators {
          * @param projects : table of existing projects
          * @return : project associated to the id
          */
-        public String getNameProject(int idProject, Project[] projects) {
+        public String getNameProject(int idProject, ArrayList<Project> projects) {
             String nameProject = null;
             switch (idProject) {
                 case 1:
-                    nameProject = projects[0].getName();
+                    nameProject = projects.get(0).getName();
                     break;
                 case 2:
-                    nameProject = projects[1].getName();
+                    nameProject = projects.get(1).getName();
                     break;
                 case 3:
-                    nameProject = projects[2].getName();
+                    nameProject = projects.get(2).getName();
                     break;
             }
             return nameProject;

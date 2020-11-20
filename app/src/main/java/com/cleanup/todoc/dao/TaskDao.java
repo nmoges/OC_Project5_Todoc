@@ -21,7 +21,7 @@ public interface TaskDao {
    void insertTask(Task task);
 
    @Update
-   void updateTask(Task task);
+   int updateTask(Task task);
 
    @Delete
    int deleteTask(Task task);
@@ -32,4 +32,7 @@ public interface TaskDao {
 
    @Query("SELECT * FROM task_table ORDER BY id")
    LiveData<List<Task>> loadAllTask();
+
+   @Query("DELETE FROM task_table")
+   void deleteAllTasks();
 }

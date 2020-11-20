@@ -1,5 +1,6 @@
 package com.cleanup.todoc.viewmodel;
 
+import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -7,6 +8,7 @@ import com.cleanup.todoc.model.Task;
 import com.cleanup.todoc.repositories.TaskRepository;
 import java.util.List;
 import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 /**
  * <p>ViewModel class containing the list of existing Tasks, wrapped in LiveData</p>
@@ -16,7 +18,7 @@ public class ListTasksViewModel extends ViewModel {
     /**
      * Repository to access TaskDao interface methods
      */
-    private final TaskRepository taskRepository;
+    private TaskRepository taskRepository;
 
     /**
      * LiveData containing the list of existing Tasks
@@ -26,13 +28,21 @@ public class ListTasksViewModel extends ViewModel {
     /**
      * Executor to access Database in another thread than UI thread
      */
-    private final Executor executor;
+    private Executor executor;
+
 
     public ListTasksViewModel(final TaskRepository taskRepository, final Executor executor) {
         this.taskRepository = taskRepository;
         this.executor = executor;
     }
 
+    public void setTaskRepository(TaskRepository taskRepository) {
+        this.taskRepository = taskRepository;
+    }
+
+    public void setExecutor(Executor executor) {
+        this.executor = executor;
+    }
     public LiveData<List<Task>> getListTasks() {
         if (listTasks == null) {
             listTasks = new MutableLiveData<>();
@@ -54,6 +64,11 @@ public class ListTasksViewModel extends ViewModel {
 
     public void deleteTask(Task task) {
         executor.execute(() -> taskRepository.deleteTask(task));
+    }
+
+
+    public void deleteAllTasks() {
+        executor.execute(taskRepository::deleteAllTask);
     }
 
     @Override

@@ -16,7 +16,7 @@ public class ListProjectsViewModel extends ViewModel {
     /**
      * Repository to access ProjectDao interface methods
      */
-    private final ProjectRepository projectRepository;
+    private ProjectRepository projectRepository;
 
     /**
      * LiveData containing the list of existing Projects
@@ -26,10 +26,18 @@ public class ListProjectsViewModel extends ViewModel {
     /**
      * Executor to access Database in another thread than UI thread
      */
-    private final Executor executor;
+    private Executor executor;
 
     public ListProjectsViewModel(final ProjectRepository projectRepository, final Executor executor) {
         this.projectRepository = projectRepository;
+        this.executor = executor;
+    }
+
+    public void setProjectRepository(ProjectRepository projectRepository) {
+        this.projectRepository = projectRepository;
+    }
+
+    public void setExecutor(Executor executor) {
         this.executor = executor;
     }
 
