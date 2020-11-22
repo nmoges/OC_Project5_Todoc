@@ -28,7 +28,7 @@ public class TaskDialog extends DialogFragment {
 
     private EditText dialogEditText;
     private Spinner dialogSpinner;
-    private AlertDialog dialog = null;
+    //private AlertDialog dialog = null;
     private TaskActions taskActions = null;
     private List<Project> allProjects;
 
@@ -66,7 +66,7 @@ public class TaskDialog extends DialogFragment {
                         }
                     );
 
-        dialog = alertBuilder.create();
+        AlertDialog dialog = alertBuilder.create();
         return dialog;
     }
 
@@ -130,6 +130,10 @@ public class TaskDialog extends DialogFragment {
         SpinnerInitializer.populateDialogSpinner(getContext(), dialogSpinner, allProjects, item_selected);
     }
 
+    /**
+     * Save item selection on Spinner
+     * @param outState : Bundle
+     */
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);

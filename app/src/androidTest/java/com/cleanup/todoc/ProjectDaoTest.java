@@ -14,7 +14,6 @@ import org.junit.runner.RunWith;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-//TODO() : replace current file with file testing ViewModelProject
 /**
  * This file tests all ProjectDAO interface methods to access project_database
  */

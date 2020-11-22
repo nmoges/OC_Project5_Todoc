@@ -4,7 +4,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -12,9 +11,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import com.cleanup.todoc.di.DI;
-import com.cleanup.todoc.repositories.ProjectRepository;
-import com.cleanup.todoc.repositories.TaskRepository;
 import com.cleanup.todoc.ui.dialogs.UpdateTaskDialog;
 import com.cleanup.todoc.utils.TaskComparators;
 import com.cleanup.todoc.viewmodel.ListProjectsViewModel;
@@ -210,7 +206,7 @@ public class TaskListFragment extends Fragment implements TaskActions {
 
     /**
      * Called after click on existing Task in the list. Allows user to modify this Task.
-     * @param task
+     * @param task : Task to update
      */
     @Override
     public void onOpenDialogForUpdateTask(@NonNull Task task) {
@@ -220,7 +216,7 @@ public class TaskListFragment extends Fragment implements TaskActions {
 
     /**
      * Called after user confirmation that the Task is modified. New Task replaces old one
-     * @param task
+     * @param task : Task to update
      */
     @Override
     public void onUpdateTask(@NonNull Task task) {
@@ -290,5 +286,4 @@ public class TaskListFragment extends Fragment implements TaskActions {
             }
         );
     }
-
 }

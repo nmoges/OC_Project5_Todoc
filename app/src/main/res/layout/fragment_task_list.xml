@@ -3,22 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.fragments.TaskListFragment"
     android:id="@+id/coordinator_fragment">
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/lbl_no_task"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:drawableTop="@drawable/ic_work_off"
-        android:layout_gravity="center"
-        android:text="@string/no_task"
-        android:textSize="22sp"
-        tools:visibility="gone" />
+        tools:visibility="gone"
+        style="@style/MaterialTextViewStyle"/>
 
-    <!-- android:gravity="center_horizontal"
-    android:layout_centerInParent="true" -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_tasks"
         android:layout_width="match_parent"
@@ -32,9 +26,7 @@
         android:id="@+id/fab_add_task"
         android:layout_width="56dp"
         android:layout_height="56dp"
-        android:layout_gravity="bottom|right"
-        android:layout_margin="20dp"
-        android:contentDescription="@string/add_task"
-        app:srcCompat="@drawable/ic_add" />
+        style="@style/FloatingActionButtonStyle"
+        android:contentDescription="@string/fab_description" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

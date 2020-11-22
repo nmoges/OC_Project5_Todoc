@@ -6,7 +6,6 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import com.cleanup.todoc.dao.ProjectDao;
 import com.cleanup.todoc.dao.TaskDao;
-import com.cleanup.todoc.di.DI;
 import com.cleanup.todoc.model.Project;
 import com.cleanup.todoc.model.Task;
 
@@ -33,18 +32,6 @@ public abstract class TodocDatabase extends RoomDatabase {
             instance = Room.databaseBuilder(context, TodocDatabase.class, "task_database")
                     .fallbackToDestructiveMigration()
                     .build();
-
-            // Check if data already exists in parent table
-            DI.provideExecutor().execute(() -> {
-                    if (instance.projectDao().getProject(1) == null) {
-                        Project[] projects = DI.providesProjects(context);
-                        for (Project project : projects) {
-                            instance.projectDao().insertProject(project);
-                        }
-                    }
-                }
-            );
-
         }
         return instance;
     }

@@ -34,12 +34,6 @@ public class TaskRepository {
         return taskDao.deleteTask(task);
     }
 
-    // Defined only for testing
-    @VisibleForTesting
-    public Task getTask(int taskId) {
-        return taskDao.getTask(taskId);
-    }
-
     public LiveData<List<Task>> loadAllTasks() {
         return taskDao.loadAllTask();
     }

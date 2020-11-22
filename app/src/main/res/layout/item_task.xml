@@ -13,13 +13,9 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
         android:src="@drawable/bkg_oval"
-        tools:tint="@sample/tasks.json/data/backgroundTint" />
+        tools:tint="@sample/tasks.json/data/backgroundTint"
+        style="@style/AppCompatImageViewStyle"/>
 
 
     <androidx.appcompat.widget.AppCompatImageView
@@ -27,14 +23,10 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
         android:src="@drawable/ic_delete"
         android:background="?android:attr/selectableItemBackgroundBorderless"
-        app:tint="#DE000000" />
+        app:tint="@color/app_compat_img_tint"
+        style="@style/AppCompatImageViewStyle"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -44,25 +36,22 @@
         android:layout_toEndOf="@+id/img_project"
         android:orientation="vertical">
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/lbl_task_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:ellipsize="end"
-            android:lines="1"
             android:textStyle="bold"
-            android:textSize="16sp"
-            tools:text="@sample/tasks.json/data/taskName" />
+            tools:text="@sample/tasks.json/data/taskName"
+            style="@style/MaterialTextViewItemStyle"/>
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/lbl_project_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:ellipsize="end"
-            android:textSize="16sp"
-            android:lines="1"
-            tools:text="@sample/tasks.json/data/projectName" />
+            tools:text="@sample/tasks.json/data/projectName"
+            style="@style/MaterialTextViewItemStyle"/>
+
     </LinearLayout>
 </RelativeLayout>

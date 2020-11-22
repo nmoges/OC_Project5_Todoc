@@ -1,9 +1,6 @@
 package com.cleanup.todoc.di;
 
 import android.content.Context;
-
-import androidx.room.RoomDatabase;
-
 import com.cleanup.todoc.R;
 import com.cleanup.todoc.database.TodocDatabase;
 import com.cleanup.todoc.model.Project;
@@ -21,7 +18,20 @@ public class DI {
      * @return : Database instance
      */
     public static TodocDatabase provideDatabase(Context context) {
-        return TodocDatabase.getInstance(context);
+        TodocDatabase instance = TodocDatabase.getInstance(context);
+
+        // Check if data already exists in parent table
+        DI.provideExecutor().execute(() -> {
+                    if (instance.projectDao().getProject(1) == null) {
+                        Project[] projects = DI.providesProjects(context);
+                        for (Project project : projects) {
+                            instance.projectDao().insertProject(project);
+                        }
+                    }
+                }
+        );
+
+        return instance;
     }
 
     /**

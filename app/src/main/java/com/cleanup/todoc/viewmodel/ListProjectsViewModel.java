@@ -7,7 +7,7 @@ import com.cleanup.todoc.model.Project;
 import com.cleanup.todoc.repositories.ProjectRepository;
 import java.util.List;
 import java.util.concurrent.Executor;
-
+// TODO(): Ajouter tests sur les setters
 /**
  * <p>ViewModel class containing the list of existing Projects, wrapped in LiveData</p>
  */

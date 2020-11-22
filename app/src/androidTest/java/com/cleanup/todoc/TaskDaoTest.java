@@ -1,8 +1,6 @@
 package com.cleanup.todoc;
 
 import android.content.Context;
-
-import androidx.lifecycle.ViewModelProvider;
 import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -11,10 +9,8 @@ import com.cleanup.todoc.di.DI;
 import com.cleanup.todoc.model.Project;
 import com.cleanup.todoc.model.Task;
 import com.cleanup.todoc.repositories.ProjectRepository;
-import com.cleanup.todoc.repositories.TaskRepository;
 import com.cleanup.todoc.viewmodel.ListTasksViewModel;
 import com.cleanup.todoc.viewmodel.ViewModelFactory;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,10 +25,7 @@ import static org.junit.Assert.assertEquals;
 public class TaskDaoTest {
 
     private TodocDatabase database;
-    private Project[] allProjects;
 
-    private ListTasksViewModel listTasksViewModel;
-    //TODO() : to update
     @Before
     public void initDatabase() {
         Context context = ApplicationProvider.getApplicationContext();
@@ -40,17 +33,11 @@ public class TaskDaoTest {
         // Initialize database
         this.database = Room.inMemoryDatabaseBuilder(context, TodocDatabase.class).build();
 
-        // Initiates a Factory to create ViewModel instances
-        ViewModelFactory factory = new ViewModelFactory(context);
-        listTasksViewModel = factory.create(ListTasksViewModel.class);
-
         // Initialize Repositories
         ProjectRepository projectRepository = new ProjectRepository(database.projectDao());
-        TaskRepository taskRepository = new TaskRepository(database.taskDao());
-
 
         // Initialize project_table in database
-        allProjects = DI.providesProjects(context);
+        Project[] allProjects = DI.providesProjects(context);
         for (Project allProject : allProjects) {
             projectRepository.insertProject(allProject);
         }

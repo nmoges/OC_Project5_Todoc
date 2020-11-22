@@ -1,67 +1,66 @@
 package com.cleanup.todoc;
 
-import android.view.View;
-import android.widget.TextView;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.test.rule.ActivityTestRule;
+import androidx.room.Room;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.rule.ActivityTestRule;
+import com.cleanup.todoc.database.TodocDatabase;
+import com.cleanup.todoc.di.DI;
+import com.cleanup.todoc.model.Project;
+import com.cleanup.todoc.repositories.ProjectRepository;
 import com.cleanup.todoc.ui.activities.MainActivity;
+import com.cleanup.todoc.viewmodel.ListTasksViewModel;
+import com.cleanup.todoc.viewmodel.ViewModelFactory;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.cleanup.todoc.TestUtils.withRecyclerView;
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
-
-/**
- * Instrumented test, which will execute on an Android device.
- *
- * @author Gaëtan HERFRAY
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
- */
-
-// TODO() : This file must be delete and replaced by a test file for TaskListFragment,
-//          since all UI logic has been removed from MainActivity activity
 
 @RunWith(AndroidJUnit4.class)
-public class MainActivityInstrumentedTest {
+public class SortListTasksTest {
+
     @Rule
-    public ActivityTestRule<MainActivity> rule = new ActivityTestRule<>(MainActivity.class);
+    public final ActivityTestRule<MainActivity> mMainActivityRule = new ActivityTestRule<>(MainActivity.class);
 
-    @Test
-    public void addAndRemoveTask() {
-        MainActivity activity = rule.getActivity();
-        TextView lblNoTask = activity.findViewById(R.id.lbl_no_task);
-        RecyclerView listTasks = activity.findViewById(R.id.list_tasks);
+    private ListTasksViewModel listTasksViewModel;
 
-        onView(withId(R.id.fab_add_task)).perform(click());
-        onView(withId(R.id.txt_task_name)).perform(replaceText("Tâche example"));
-        onView(withId(android.R.id.button1)).perform(click());
+    @Before
+    public void initDatabase() {
+        MainActivity mainActivity = mMainActivityRule.getActivity();
 
-        // Check that lblTask is not displayed anymore
-        assertThat(lblNoTask.getVisibility(), equalTo(View.GONE));
-        // Check that recyclerView is displayed
-        assertThat(listTasks.getVisibility(), equalTo(View.VISIBLE));
-        // Check that it contains one element only
-        assertThat(listTasks.getAdapter().getItemCount(), equalTo(1));
+        // Initialize database
+        TodocDatabase database = Room.inMemoryDatabaseBuilder(mainActivity, TodocDatabase.class).build();
 
-        onView(withId(R.id.img_delete)).perform(click());
+        // Initiates a Factory to create ViewModel instances
+        ViewModelFactory factory = new ViewModelFactory(mainActivity);
+        listTasksViewModel = factory.create(ListTasksViewModel.class);
 
-        // Check that lblTask is displayed
-        assertThat(lblNoTask.getVisibility(), equalTo(View.VISIBLE));
-        // Check that recyclerView is not displayed anymore
-        assertThat(listTasks.getVisibility(), equalTo(View.GONE));
+        // Initialize Repositories
+        ProjectRepository projectRepository = new ProjectRepository(database.projectDao());
+
+        // Initialize parent table in database
+        Project[] projects = DI.providesProjects(mainActivity);
+
+        for(Project project : projects) {
+            projectRepository.insertProject(project);
+        }
+    }
+
+    @After
+    public void cleanDatabase() {
+        // Clean task_table for next test
+        listTasksViewModel.deleteAllTasks();
     }
 
     @Test
-    public void sortTasks() {
-        MainActivity activity = rule.getActivity();
+    public void check_if_sortTasks_methods_works() {
 
         onView(withId(R.id.fab_add_task)).perform(click());
         onView(withId(R.id.txt_task_name)).perform(replaceText("aaa Tâche example"));
@@ -119,5 +118,8 @@ public class MainActivityInstrumentedTest {
                 .check(matches(withText("zzz Tâche example")));
         onView(withRecyclerView(R.id.list_tasks).atPositionOnView(2, R.id.lbl_task_name))
                 .check(matches(withText("aaa Tâche example")));
+
+        // TODO() : Add project sort method
     }
+
 }

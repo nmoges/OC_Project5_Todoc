@@ -20,12 +20,12 @@ import java.util.List;
  * @author Gaëtan HERFRAY (update : Nicolas MOGES)
  */
 public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TaskViewHolder> {
+
     /**
      * The list of tasks the adapter deals with
      */
     @NonNull
     private List<Task> tasks;
-
 
     /**
      * The listener for when a task needs to be deleted

@@ -27,7 +27,7 @@ public class TaskUnitTest {
      *      - check values of each item
      */
     @Test
-    public void test_projects() {
+    public void test_task_objects() {
         final Task task1 = new Task(1, "task 1", new Date().getTime());
         final Task task2 = new Task( 2, "task 2", new Date().getTime());
         final Task task3 = new Task(3, "task 3", new Date().getTime());

@@ -25,11 +25,6 @@ public class ProjectRepository {
         projectDao.insertProject(project);
     }
 
-    // Defined only for testing
-    public Project getProject(int projectId) {
-        return projectDao.getProject(projectId);
-    }
-
     public LiveData<List<Project>> loadAllProjects() {
         return projectDao.loadAllProject();
     }

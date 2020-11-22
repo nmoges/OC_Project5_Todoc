@@ -2,7 +2,6 @@ package com.cleanup.todoc;
 
 import android.content.Context;
 import android.content.res.Resources;
-import com.cleanup.todoc.di.DI;
 import com.cleanup.todoc.model.Project;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,11 +10,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import static org.junit.Assert.assertEquals;
 
-/**
- * <p> Unit tests for projects
- *     This file tests if the DI class provides a Project[] object with correct information for each Project
- * </p>
- */
 @RunWith(JUnit4.class)
 public class ProjectUnitTest {
 
@@ -25,15 +19,8 @@ public class ProjectUnitTest {
     @Mock
     private Resources mockResources;
 
-    /**
-     * This test :
-     *      - defines mock Context and Resources objects needed to call the DI method
-     *      - calls the DI method providing a Project[] object
-     *      - checks size of Project[]
-     *      - check each item of Project[]
-     */
     @Test
-    public void test_di_projects_provider() {
+    public void test_project_objects() {
         mockContext = Mockito.mock(Context.class);
         mockResources = Mockito.mock(Resources.class);
 
@@ -48,18 +35,24 @@ public class ProjectUnitTest {
         Mockito.when(mockResources.getString(R.string.project_lucidia)).thenReturn("Projet Lucidia");
         Mockito.when(mockResources.getString(R.string.project_circus)).thenReturn("Projet Circus");
 
-        // Get projets from dependency injector
-        Project[] projects = DI.providesProjects(mockContext);
-        assertEquals(3, projects.length);
+        // Create Project objects
+        final Project project1 = new Project(mockContext.getResources().getString(R.string.project_tartampion),
+                                             mockContext.getResources().getColor(R.color.project_tartampion));
 
-        // Check projects informations
-        assertEquals(R.color.project_tartampion, projects[0].getColor());
-        assertEquals("Projet Tartampion", projects[0].getName());
+        final Project project2 = new Project(mockContext.getResources().getString(R.string.project_lucidia),
+                mockContext.getResources().getColor(R.color.project_lucidia));
 
-        assertEquals(R.color.project_lucidia, projects[1].getColor());
-        assertEquals("Projet Lucidia", projects[1].getName());
+        final Project project3 = new Project(mockContext.getResources().getString(R.string.project_circus),
+                mockContext.getResources().getColor(R.color.project_circus));
 
-        assertEquals(R.color.project_circus, projects[2].getColor());
-        assertEquals("Projet Circus", projects[2].getName());
+        // Check objects informations
+        assertEquals(R.color.project_tartampion, project1.getColor());
+        assertEquals("Projet Tartampion", project1.getName());
+
+        assertEquals(R.color.project_lucidia, project2.getColor());
+        assertEquals("Projet Lucidia", project2.getName());
+
+        assertEquals(R.color.project_circus, project3.getColor());
+        assertEquals("Projet Circus", project3.getName());
     }
 }

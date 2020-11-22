@@ -1,6 +1,8 @@
 package com.cleanup.todoc;
 
-import androidx.lifecycle.ViewModelProvider;
+import android.view.View;
+import android.widget.TextView;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -9,12 +11,11 @@ import com.cleanup.todoc.database.TodocDatabase;
 import com.cleanup.todoc.di.DI;
 import com.cleanup.todoc.model.Project;
 import com.cleanup.todoc.repositories.ProjectRepository;
-import com.cleanup.todoc.repositories.TaskRepository;
 import com.cleanup.todoc.testutils.DeleteViewAction;
 import com.cleanup.todoc.ui.activities.MainActivity;
-import com.cleanup.todoc.viewmodel.ListProjectsViewModel;
 import com.cleanup.todoc.viewmodel.ListTasksViewModel;
 import com.cleanup.todoc.viewmodel.ViewModelFactory;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -27,16 +28,15 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static com.cleanup.todoc.TestUtils.withRecyclerView;
 import static com.cleanup.todoc.testutils.RecyclerViewItemCountAssertion.withItemCount;
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertThat;
 
 @RunWith(AndroidJUnit4.class)
 public class ListTasksViewModelTest {
 
-    private TodocDatabase database;
-    private Project[] projects;
     private ListTasksViewModel listTasksViewModel;
-    private ListProjectsViewModel listProjectsViewModel;
-    private TaskRepository taskRepository;
     private MainActivity mainActivity;
 
 
@@ -49,7 +49,7 @@ public class ListTasksViewModelTest {
         mainActivity = mMainActivityRule.getActivity();
 
         // Initialize database
-        this.database = Room.inMemoryDatabaseBuilder(mainActivity, TodocDatabase.class).build();
+        TodocDatabase database = Room.inMemoryDatabaseBuilder(mainActivity, TodocDatabase.class).build();
 
         // Initiates a Factory to create ViewModel instances
         ViewModelFactory factory = new ViewModelFactory(mainActivity);
@@ -57,16 +57,21 @@ public class ListTasksViewModelTest {
 
         // Initialize Repositories
         ProjectRepository projectRepository = new ProjectRepository(database.projectDao());
-        taskRepository = new TaskRepository(database.taskDao());
 
         // Initialize parent table in database
-        projects = DI.providesProjects(mainActivity);
+        Project[] projects = DI.providesProjects(mainActivity);
 
         for(Project project : projects) {
             projectRepository.insertProject(project);
         }
     }
 
+
+    @After
+    public void cleanDatabase() {
+        // Clean task_table for next test
+        listTasksViewModel.deleteAllTasks();
+    }
 
     /**
      * This test adds a new Task to the list through the following steps :
@@ -102,9 +107,6 @@ public class ListTasksViewModelTest {
         // Check if RecycleView is updated
         onView(withId(R.id.list_tasks))
                 .check(withItemCount(1));
-
-        // Clean task_table for next test
-        listTasksViewModel.deleteAllTasks();
     }
 
     /**
@@ -150,9 +152,6 @@ public class ListTasksViewModelTest {
         // Check if list of Tasks has changed
         onView(withId(R.id.list_tasks))
                 .check(withItemCount(2));
-
-        // Clean task_table for next test
-        listTasksViewModel.deleteAllTasks();
     }
 
 
@@ -164,7 +163,7 @@ public class ListTasksViewModelTest {
      *      - close Dialog
      *
      */
-    /*@Test
+    @Test
     public void test_update_existing_task() {
 
         // Perform click on Floating Action Button
@@ -197,12 +196,12 @@ public class ListTasksViewModelTest {
         onView(withId(R.id.txt_update_task_name)).perform(typeText(" unitaire"));
 
         // Close Dialog by clicking on Positive Button
-        onView(withText("Ajouter"))
+        onView(withText("OK"))
                 .perform(click());
 
-        // Clean task_table for next test
-        listTasksViewModel.deleteAllTasks();
-    }*/
+        onView(withRecyclerView(R.id.list_tasks).atPositionOnView(0, R.id.lbl_task_name))
+                .check(matches(withText("Test unitaire")));
+    }
 
     /**
      * This test :
@@ -225,7 +224,6 @@ public class ListTasksViewModelTest {
 
         // Write text
         onView(withId(R.id.txt_task_name)).perform(typeText("Validation software"));
-
 
         // Close Software Keybord
         closeSoftKeyboard();
@@ -250,10 +248,60 @@ public class ListTasksViewModelTest {
         onView(withId(R.id.list_tasks))
                 .check(withItemCount(1));
 
-        // Clean task_table for next test
-        listTasksViewModel.deleteAllTasks();
+        onView(withRecyclerView(R.id.list_tasks)
+                .atPositionOnView(0, R.id.lbl_task_name))
+                .check(matches(withText("Validation software")));
 
         // Clean task_table for next test
         listTasksViewModel.deleteAllTasks();
+    }
+
+    /**
+     * This test :
+     *      - checks if background elements are displayed when list of Task is empty
+     *      - adds a Task to the list
+     *      - checks if background elements status display is updated
+     *      - removes Task
+     *      - checks if background elements status display is updated
+     */
+    @Test
+    public void check_background_update() {
+
+        TextView lblNoTask = mainActivity.findViewById(R.id.lbl_no_task);
+        RecyclerView listTasks = mainActivity.findViewById(R.id.list_tasks);
+
+        // Check if background elements are initially visible
+        assertThat(lblNoTask.getVisibility(), equalTo(View.VISIBLE));
+        assertThat(listTasks.getVisibility(), equalTo(View.GONE));
+
+        // Perform click on Floating Action Button
+        onView(withId(R.id.fab_add_task))
+                .perform(click());
+
+        // Perform click on Edit Text to enable focus
+        onView(withId(R.id.txt_task_name))
+                .perform(click());
+
+        // Write text
+        onView(withId(R.id.txt_task_name))
+                .perform(typeText("Validation software"));
+
+        // Close Software Keybord
+        closeSoftKeyboard();
+
+        // Close Dialog by clicking on Positive Button
+        onView(withText("Ajouter"))
+                .perform(click());
+
+        // Check if background elements are now gone
+        assertThat(lblNoTask.getVisibility(), equalTo(View.GONE));
+        assertThat(listTasks.getVisibility(), equalTo(View.VISIBLE));
+
+        // Remove item
+        onView(withId(R.id.img_delete)).perform(click());
+
+        // Check if background elements are visible again
+        assertThat(lblNoTask.getVisibility(), equalTo(View.VISIBLE));
+        assertThat(listTasks.getVisibility(), equalTo(View.GONE));
     }
 }

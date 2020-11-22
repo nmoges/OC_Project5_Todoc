@@ -27,10 +27,8 @@ public class Project {
     /**
      * The hex (ARGB) code of the color associated to the project
      */
-    // TODO() : Replace type by Long
     @ColorInt
     private final int color;
-
 
     /**
      * Instantiates a new Project.

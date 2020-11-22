@@ -27,7 +27,7 @@ public class UpdateTaskDialog extends DialogFragment {
 
     private EditText dialogEditText;
     private Spinner dialogSpinner;
-    private AlertDialog dialog = null;
+    //private AlertDialog dialog = null;
     private Task taskToUpdate;
     private TaskActions taskActions = null;
     private List<Project> allProjects;
@@ -65,7 +65,7 @@ public class UpdateTaskDialog extends DialogFragment {
                         dialogSpinner = null;
                     }
                 );
-        dialog = alertBuilder.create();
+        AlertDialog dialog = alertBuilder.create();
         return dialog;
     }
 
