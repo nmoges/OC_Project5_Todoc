@@ -30,7 +30,7 @@ public class Task {
      * The name of the task
      */
     @NonNull
-    private String name;
+    private String name = "";
 
     /**
      * The timestamp when the task has been created

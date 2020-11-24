@@ -45,7 +45,7 @@ public class ProjectDaoTest {
     public void insertProjectsInDatabaseThenRead() {
 
         // Get existing projects
-        final Project[] projects = DI.providesProjects(context);
+        final Project[] projects = DI.provideProjects(context);
 
         // Insert all existing projects
         for(Project project : projects) {

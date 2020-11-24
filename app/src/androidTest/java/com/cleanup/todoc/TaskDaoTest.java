@@ -9,8 +9,6 @@ import com.cleanup.todoc.di.DI;
 import com.cleanup.todoc.model.Project;
 import com.cleanup.todoc.model.Task;
 import com.cleanup.todoc.repositories.ProjectRepository;
-import com.cleanup.todoc.viewmodel.ListTasksViewModel;
-import com.cleanup.todoc.viewmodel.ViewModelFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,7 +35,7 @@ public class TaskDaoTest {
         ProjectRepository projectRepository = new ProjectRepository(database.projectDao());
 
         // Initialize project_table in database
-        Project[] allProjects = DI.providesProjects(context);
+        Project[] allProjects = DI.provideProjects(context);
         for (Project allProject : allProjects) {
             projectRepository.insertProject(allProject);
         }

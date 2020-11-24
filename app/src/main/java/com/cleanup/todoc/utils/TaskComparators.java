@@ -44,8 +44,8 @@ public class TaskComparators {
         @Override
         public int compare(Task left, Task right) {
 
-            String leftProjectName = null;
-            String rightProjectName = null;
+            String leftProjectName;
+            String rightProjectName;
 
             // Get Left Project
             leftProjectName = getNameProject(left.getProjectId(), projects);

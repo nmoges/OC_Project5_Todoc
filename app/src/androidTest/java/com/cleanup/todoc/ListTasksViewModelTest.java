@@ -59,7 +59,7 @@ public class ListTasksViewModelTest {
         ProjectRepository projectRepository = new ProjectRepository(database.projectDao());
 
         // Initialize parent table in database
-        Project[] projects = DI.providesProjects(mainActivity);
+        Project[] projects = DI.provideProjects(mainActivity);
 
         for(Project project : projects) {
             projectRepository.insertProject(project);

@@ -23,7 +23,7 @@ public class DI {
         // Check if data already exists in parent table
         DI.provideExecutor().execute(() -> {
                     if (instance.projectDao().getProject(1) == null) {
-                        Project[] projects = DI.providesProjects(context);
+                        Project[] projects = DI.provideProjects(context);
                         for (Project project : projects) {
                             instance.projectDao().insertProject(project);
                         }
@@ -46,7 +46,7 @@ public class DI {
      * Provides a table containing pre-defined projects to store in database
      * @return : table of pre-defined projects
      */
-    public static Project[] providesProjects(Context context) {
+    public static Project[] provideProjects(Context context) {
 
         return new Project[]{
                 new Project(context.getResources().getString(R.string.project_tartampion), context.getResources().getColor(R.color.project_tartampion)),

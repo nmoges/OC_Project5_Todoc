@@ -24,15 +24,36 @@ import java.util.Objects;
  */
 public class TaskDialog extends DialogFragment {
 
+    /**
+     * TaskDialog TAG
+     */
     public final static String TAG_TASK_DIALOG = "TAG_TASK_DIALOG";
 
+    /**
+     * TaskDialog EditText
+     */
     private EditText dialogEditText;
+
+    /**
+     * TaskDialog Spinner
+     */
     private Spinner dialogSpinner;
-    //private AlertDialog dialog = null;
+
+    /**
+     * TaskActions interface
+     */
     private TaskActions taskActions = null;
+
+    /**
+     * List of all Projects
+     */
     private List<Project> allProjects;
 
+    /**
+     * Selected item index in Spinner
+     */
     private int item_selected = 0;
+
 
     public TaskDialog() {/* Empty constructor */}
 
@@ -66,8 +87,7 @@ public class TaskDialog extends DialogFragment {
                         }
                     );
 
-        AlertDialog dialog = alertBuilder.create();
-        return dialog;
+        return alertBuilder.create();
     }
 
     @Override
@@ -84,7 +104,10 @@ public class TaskDialog extends DialogFragment {
         dialogSpinner = Objects.requireNonNull(getDialog()).findViewById(R.id.project_spinner);
     }
 
-
+    /**
+     * Defines action on DialogFragment positive button
+     * @param dialogInterface : DialogInterface with which user interact
+     */
     public void onPositiveButtonClick(DialogInterface dialogInterface) {
 
         // If dialog is open

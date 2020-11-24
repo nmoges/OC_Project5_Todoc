@@ -16,7 +16,7 @@ public class ListTasksViewModel extends ViewModel {
     /**
      * Repository to access TaskDao interface methods
      */
-    private TaskRepository taskRepository;
+    private final TaskRepository taskRepository;
 
     /**
      * LiveData containing the list of existing Tasks
@@ -26,7 +26,7 @@ public class ListTasksViewModel extends ViewModel {
     /**
      * Executor to access Database in another thread than UI thread
      */
-    private Executor executor;
+    private final Executor executor;
 
 
     public ListTasksViewModel(final TaskRepository taskRepository, final Executor executor) {
@@ -34,13 +34,6 @@ public class ListTasksViewModel extends ViewModel {
         this.executor = executor;
     }
 
-    public void setTaskRepository(TaskRepository taskRepository) {
-        this.taskRepository = taskRepository;
-    }
-
-    public void setExecutor(Executor executor) {
-        this.executor = executor;
-    }
     public LiveData<List<Task>> getListTasks() {
         if (listTasks == null) {
             listTasks = new MutableLiveData<>();
@@ -64,13 +57,8 @@ public class ListTasksViewModel extends ViewModel {
         executor.execute(() -> taskRepository.deleteTask(task));
     }
 
-
     public void deleteAllTasks() {
         executor.execute(taskRepository::deleteAllTask);
     }
 
-    @Override
-    protected void onCleared() {
-        super.onCleared();
-    }
 }

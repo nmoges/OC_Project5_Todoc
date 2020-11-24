@@ -1,6 +1,5 @@
 package com.cleanup.todoc.repositories;
 
-import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.LiveData;
 import com.cleanup.todoc.dao.TaskDao;
 import com.cleanup.todoc.model.Task;
@@ -39,6 +38,6 @@ public class TaskRepository {
     }
 
     public void deleteAllTask() {
-        taskDao.deleteAllTasks();;
+        taskDao.deleteAllTasks();
     }
 }

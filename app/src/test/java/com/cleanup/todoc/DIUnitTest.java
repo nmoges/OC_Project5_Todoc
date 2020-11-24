@@ -51,7 +51,7 @@ public class DIUnitTest {
         Mockito.when(mockResources.getString(R.string.project_circus)).thenReturn("Projet Circus");
 
         // Get projets from dependency injector
-        Project[] projects = DI.providesProjects(mockContext);
+        Project[] projects = DI.provideProjects(mockContext);
         assertNotNull(projects);
         assertEquals(3, projects.length);
 

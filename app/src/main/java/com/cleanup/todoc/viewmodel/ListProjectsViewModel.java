@@ -7,7 +7,7 @@ import com.cleanup.todoc.model.Project;
 import com.cleanup.todoc.repositories.ProjectRepository;
 import java.util.List;
 import java.util.concurrent.Executor;
-// TODO(): Ajouter tests sur les setters
+
 /**
  * <p>ViewModel class containing the list of existing Projects, wrapped in LiveData</p>
  */
@@ -16,7 +16,7 @@ public class ListProjectsViewModel extends ViewModel {
     /**
      * Repository to access ProjectDao interface methods
      */
-    private ProjectRepository projectRepository;
+    private final ProjectRepository projectRepository;
 
     /**
      * LiveData containing the list of existing Projects
@@ -26,20 +26,13 @@ public class ListProjectsViewModel extends ViewModel {
     /**
      * Executor to access Database in another thread than UI thread
      */
-    private Executor executor;
+    private final Executor executor;
 
     public ListProjectsViewModel(final ProjectRepository projectRepository, final Executor executor) {
         this.projectRepository = projectRepository;
         this.executor = executor;
     }
 
-    public void setProjectRepository(ProjectRepository projectRepository) {
-        this.projectRepository = projectRepository;
-    }
-
-    public void setExecutor(Executor executor) {
-        this.executor = executor;
-    }
 
     public LiveData<List<Project>> getListProjects() {
         if (listProjects == null) {
@@ -56,8 +49,4 @@ public class ListProjectsViewModel extends ViewModel {
         executor.execute(() -> projectRepository.insertProject(project));
     }
 
-    @Override
-    protected void onCleared() {
-        super.onCleared();
-    }
 }

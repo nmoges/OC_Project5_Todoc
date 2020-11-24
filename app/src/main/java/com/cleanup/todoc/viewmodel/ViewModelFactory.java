@@ -13,7 +13,7 @@ import java.util.concurrent.Executor;
 /**
  * <p>Factory class used to create LiveDataListTasksVM ViewModel</p>
  */
-//TODO() : ajouts tests sur ViewModelFactory : verifier appel des setters
+
 public class ViewModelFactory implements ViewModelProvider.Factory {
 
     private final TaskRepository taskRepository;

@@ -23,14 +23,40 @@ import java.util.Objects;
  */
 public class UpdateTaskDialog extends DialogFragment {
 
+    /**
+     * UpdateTaskDialog TAG
+     */
     public final static String TAG_UPDATE_TASK_DIALOG = "TAG_UPDATE_TASK_DIALOG";
 
+    /**
+     * UpdateTaskDialog EditText
+     */
     private EditText dialogEditText;
+
+    /**
+     * UpdateTaskDialog Spinner
+     */
     private Spinner dialogSpinner;
-    //private AlertDialog dialog = null;
+
+    /**
+     * Task clicked by user, which need to be updated
+     */
     private Task taskToUpdate;
+
+    /**
+     * TaskActions interface
+     */
     private TaskActions taskActions = null;
+
+    /**
+     * List of all Projects
+     */
     private List<Project> allProjects;
+
+    /**
+     * Selected item index in Spinner
+     */
+    private int item_selected = 0;
 
     public UpdateTaskDialog() {/* Empty constructor */}
 
@@ -43,6 +69,9 @@ public class UpdateTaskDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        if(savedInstanceState != null) {
+            item_selected = savedInstanceState.getInt("item_selected");
+        }
 
         // Retain current DialogFragment instance
         setRetainInstance(true);
@@ -65,8 +94,8 @@ public class UpdateTaskDialog extends DialogFragment {
                         dialogSpinner = null;
                     }
                 );
-        AlertDialog dialog = alertBuilder.create();
-        return dialog;
+
+        return alertBuilder.create();
     }
 
 
@@ -88,9 +117,19 @@ public class UpdateTaskDialog extends DialogFragment {
      */
     public void populateDialogSpinner() {
 
-        SpinnerInitializer.populateDialogSpinner(getContext(), dialogSpinner, allProjects, 0);
+        SpinnerInitializer.populateDialogSpinner(getContext(), dialogSpinner, allProjects, item_selected);
 
         dialogEditText.setText(taskToUpdate.getName());
         dialogSpinner.setSelection(taskToUpdate.getProjectId()-1);
+    }
+
+    /**
+     * Save item selection on Spinner
+     * @param outState : Bundle
+     */
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("item_selected", dialogSpinner.getSelectedItemPosition());
     }
 }

@@ -28,8 +28,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-//TODO() : Add loader
-
 /**
  * <p>Fragment used to display to user the list of all existing Task, and allowing him to create of modify Task</p>
  */
@@ -68,17 +66,7 @@ public class TaskListFragment extends Fragment implements TaskActions {
      */
     private ListTasksViewModel listTasksViewModel;
 
-    /**
-     * ViewModel containing list of existing projects
-     */
-    private ListProjectsViewModel listProjectsViewModel;
-
     public TaskListFragment() { /* Empty constructor */ }
-
-    public static TaskListFragment newInstance() {
-
-        return new TaskListFragment();
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -137,8 +125,8 @@ public class TaskListFragment extends Fragment implements TaskActions {
 
         return super.onOptionsItemSelected(item);
     }
-
-    public void initializeToolbar() {
+    
+    private void initializeToolbar() {
 
         ((MainActivityCallback) requireActivity()).setToolbarTitle(R.string.app_name);
     }
@@ -197,7 +185,7 @@ public class TaskListFragment extends Fragment implements TaskActions {
      * Called to allow user to cancel previous delete action and restore Task
      * @param taskToRestore : task to restore
      */
-    public void cancelDeleteAction(Task taskToRestore) {
+    private void cancelDeleteAction(Task taskToRestore) {
 
         Snackbar.make(binding.coordinatorFragment, R.string.snack_txt, Snackbar.LENGTH_LONG)
                 .setAction(R.string.snack_btn, (View v) -> listTasksViewModel.insertTask(taskToRestore))
@@ -268,7 +256,9 @@ public class TaskListFragment extends Fragment implements TaskActions {
         ViewModelFactory factory = new ViewModelFactory(getContext());
 
         listTasksViewModel = factory.create(ListTasksViewModel.class);
-        listProjectsViewModel = factory.create(ListProjectsViewModel.class);
+
+        //ViewModel containing list of existing projects
+        ListProjectsViewModel listProjectsViewModel = factory.create(ListProjectsViewModel.class);
 
         // Observer on ListTasks
         listTasksViewModel.getListTasks().observe(getViewLifecycleOwner(), (List<Task> newTasks) -> {
