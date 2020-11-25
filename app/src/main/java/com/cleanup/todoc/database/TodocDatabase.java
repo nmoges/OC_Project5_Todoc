@@ -29,7 +29,7 @@ public abstract class TodocDatabase extends RoomDatabase {
         if (instance == null) {
 
             // Create instance
-            instance = Room.databaseBuilder(context, TodocDatabase.class, "task_database")
+            instance = Room.databaseBuilder(context, TodocDatabase.class, "todoc_database")
                     .fallbackToDestructiveMigration()
                     .build();
         }

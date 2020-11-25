@@ -125,7 +125,7 @@ public class TaskListFragment extends Fragment implements TaskActions {
 
         return super.onOptionsItemSelected(item);
     }
-    
+
     private void initializeToolbar() {
 
         ((MainActivityCallback) requireActivity()).setToolbarTitle(R.string.app_name);

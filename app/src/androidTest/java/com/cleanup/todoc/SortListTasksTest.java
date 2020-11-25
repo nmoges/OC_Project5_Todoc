@@ -17,12 +17,18 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.RootMatchers.isPlatformPopup;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static com.cleanup.todoc.TestUtils.withRecyclerView;
+import static com.cleanup.todoc.testutils.Utils.withRecyclerView;
+import static org.hamcrest.Matchers.containsString;
 
+
+/**
+ * This file tests all sort methods for list of Tasks
+ */
 @RunWith(AndroidJUnit4.class)
 public class SortListTasksTest {
 
@@ -31,9 +37,11 @@ public class SortListTasksTest {
 
     private ListTasksViewModel listTasksViewModel;
 
+    private MainActivity mainActivity;
+
     @Before
     public void initDatabase() {
-        MainActivity mainActivity = mMainActivityRule.getActivity();
+        mainActivity = mMainActivityRule.getActivity();
 
         // Initialize database
         TodocDatabase database = Room.inMemoryDatabaseBuilder(mainActivity, TodocDatabase.class).build();
@@ -59,6 +67,16 @@ public class SortListTasksTest {
         listTasksViewModel.deleteAllTasks();
     }
 
+    /**
+     * This test :
+     *      - creates three Tasks
+     *      - checks Sort alphabetical method
+     *      - checks Sort alphabetical inverted method
+     *      - checks Sort old first method
+     *      - checks Sort recent first method
+     *      - modifies Project items
+     *      - checks Sort Project method
+     */
     @Test
     public void check_if_sortTasks_methods_works() {
 
@@ -119,7 +137,38 @@ public class SortListTasksTest {
         onView(withRecyclerView(R.id.list_tasks).atPositionOnView(2, R.id.lbl_task_name))
                 .check(matches(withText("aaa Tâche example")));
 
-        // TODO() : Add project sort method
+        // Modify Project items
+        onView(withRecyclerView(R.id.list_tasks)
+                .atPositionOnView(0, R.id.lbl_task_name))
+                .perform(click());
+        onView(withId(R.id.update_project_spinner))
+                .perform(click());
+        onView(withText(containsString(mainActivity.getResources().getString(R.string.project_circus))))
+                .inRoot(isPlatformPopup())
+                .perform(click());
+        onView(withText(mainActivity.getResources().getString(R.string.ok)))
+                .perform(click());
+
+        onView(withRecyclerView(R.id.list_tasks)
+                .atPositionOnView(2, R.id.lbl_task_name))
+                .perform(click());
+        onView(withId(R.id.update_project_spinner))
+                .perform(click());
+        onView(withText(containsString(mainActivity.getResources().getString(R.string.project_lucidia))))
+                .inRoot(isPlatformPopup())
+                .perform(click());
+        onView(withText(mainActivity.getResources().getString(R.string.ok)))
+                .perform(click());
+
+        // Sort by project
+        onView(withId(R.id.action_filter)).perform(click());
+        onView(withText(R.string.sort_projects)).perform(click());
+        onView(withRecyclerView(R.id.list_tasks).atPositionOnView(0, R.id.lbl_project_name))
+                .check(matches(withText(mainActivity.getResources().getString(R.string.project_circus))));
+        onView(withRecyclerView(R.id.list_tasks).atPositionOnView(1, R.id.lbl_project_name))
+                .check(matches(withText(mainActivity.getResources().getString(R.string.project_lucidia))));
+        onView(withRecyclerView(R.id.list_tasks).atPositionOnView(2, R.id.lbl_project_name))
+                .check(matches(withText(mainActivity.getResources().getString(R.string.project_tartampion))));
     }
 
 }

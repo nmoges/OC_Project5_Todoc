@@ -23,7 +23,7 @@ public class DI {
         // Check if data already exists in parent table
         DI.provideExecutor().execute(() -> {
                     if (instance.projectDao().getProject(1) == null) {
-                        Project[] projects = DI.provideProjects(context);
+                        Project[] projects = provideProjects(context);
                         for (Project project : projects) {
                             instance.projectDao().insertProject(project);
                         }

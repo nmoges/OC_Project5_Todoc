@@ -1,4 +1,4 @@
-package com.cleanup.todoc;
+package com.cleanup.todoc.testutils;
 
 import android.view.View;
 import androidx.annotation.IdRes;
@@ -15,7 +15,7 @@ import org.hamcrest.Matchers;
 /**
  * Created by dannyroa on 5/9/15.
  */
-public class TestUtils {
+public class Utils {
 
     public static <VH extends RecyclerView.ViewHolder> ViewAction actionOnItemViewAtPosition(int position,
                                                                                              @IdRes int viewId,
