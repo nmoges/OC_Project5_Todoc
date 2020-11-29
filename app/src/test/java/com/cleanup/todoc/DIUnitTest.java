@@ -14,7 +14,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 /**
- * <p> Unit tests for projects
+ * <p>
  *     This file tests if the DI class static methods provide non null objects
  * </p>
  */

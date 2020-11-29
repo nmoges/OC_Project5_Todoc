@@ -1,14 +1,11 @@
 package com.cleanup.todoc;
 
 import android.content.Context;
-
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-
 import com.cleanup.todoc.viewmodel.ListProjectsViewModel;
 import com.cleanup.todoc.viewmodel.ListTasksViewModel;
 import com.cleanup.todoc.viewmodel.ViewModelFactory;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.junit.Assert.assertNotNull;

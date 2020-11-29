@@ -10,6 +10,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import static org.junit.Assert.assertEquals;
 
+/**
+ * <p>
+ *     Unit tests for projects
+ * </p>
+ */
 @RunWith(JUnit4.class)
 public class ProjectUnitTest {
 
@@ -19,6 +24,11 @@ public class ProjectUnitTest {
     @Mock
     private Resources mockResources;
 
+    /**
+     * This test :
+     *      - creates 3 projects
+     *      - checks if Projects objects are correctly created
+     */
     @Test
     public void test_project_objects() {
         mockContext = Mockito.mock(Context.class);
