@@ -57,4 +57,7 @@ public class ListTasksViewModel extends ViewModel {
         executor.execute(() -> taskRepository.deleteTask(task));
     }
 
+    public void deleteAllTasks() {
+        executor.execute(taskRepository::deleteAllTask);
+    }
 }
