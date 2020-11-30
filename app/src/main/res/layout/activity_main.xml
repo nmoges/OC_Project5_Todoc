@@ -33,6 +33,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:tag="TAG_TASK_LIST_FRAGMENT"
-            android:name="com.cleanup.todoc.ui.fragments.TaskListFragment"/>
+            android:name="com.cleanup.todocapp.ui.fragments.TaskListFragment"/>
     </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
